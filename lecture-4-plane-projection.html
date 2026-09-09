@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="画法几何：平面的投影。四页单文件重绘样稿，几何模型驱动，离线可用。"><title>讲义4 平面的投影 · 画法几何</title><style>:root{--ink:#203a49;--navy:#183e54;--teal:#27877f;--sage:#e8f3ef;--line:#dce7e7;--muted:#6c818a;--paper:#fff;--font:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#eaf0f1;color:var(--ink);font-family:var(--font)}button{font:inherit;cursor:pointer;border:0}button:focus-visible{outline:3px solid #27877f;outline-offset:4px}button:disabled{opacity:.32;cursor:default}#app{height:100dvh;display:flex;flex-direction:column;align-items:center;overflow:hidden}.app-bar{height:46px;flex-shrink:0;display:flex;align-items:center;gap:22px;width:100%;padding:0 28px;font-size:13px;letter-spacing:.02em}.muted{color:var(--muted)}#source-page{margin-left:auto;color:var(--muted)}.app-bar button{font-size:12px;padding:5px 10px;background:transparent;color:var(--muted)}#viewport{flex:1;min-height:0;width:100%;position:relative;display:flex;align-items:center;justify-content:center}#stage{position:absolute;width:1600px;height:900px;background:var(--paper);transform-origin:center;box-shadow:0 8px 40px #1c394014;overflow:hidden}.slide{position:absolute;inset:0;display:none;background:#fff}.slide.active{display:block}.slide:not(.cover){padding:52px 84px}.eyebrow{font-size:24px;color:var(--teal);letter-spacing:3px;margin-bottom:18px}h1,h2,h3,p,figure{margin:0}h2{font-size:48px;line-height:1.35;letter-spacing:1px;font-weight:600;color:var(--navy)}i,.math{font-family:"Times New Roman",serif;font-weight:400}i{font-style:italic}.relation{font-size:31px;margin-top:14px}.relation .math{font-size:34px;margin-left:12px}.cover{background:linear-gradient(90deg,#fff 0%,#fff 70%,#f3f8f5 70%,#f3f8f5 100%)}.cover-rule{position:absolute;left:112px;top:103px;width:62px;height:6px;background:var(--teal)}.cover-course{position:absolute;left:112px;top:139px;font-size:35px;letter-spacing:6px;color:var(--navy)}.cover-lecture{position:absolute;left:115px;top:362px;font-size:30px;color:var(--teal)}.cover h1{position:absolute;left:106px;top:434px;font-size:108px;line-height:1.3;font-weight:600;letter-spacing:7px;color:var(--navy)}.cover-number{position:absolute;right:90px;top:236px;font-size:280px;line-height:1;font-weight:300;color:#d2e5dc;font-family:Arial,sans-serif;letter-spacing:0px}.cover-bottom{position:absolute;left:114px;bottom:104px;font-size:21px;color:var(--muted);letter-spacing:5px;border-top:1px solid #bccfca;padding-top:24px;width:490px}figure{position:absolute}figcaption{font-size:26px;text-align:center;line-height:40px;color:var(--navy)}.image-button{display:block;width:100%;height:100%;background:transparent;padding:0;border-radius:3px}.image-button img{width:100%;height:100%;object-fit:contain;display:block}.horizontal figure{top:225px;height:492px}.left-diagram{left:84px;width:650px}.right-diagram{left:827px;width:690px}.horizontal figure .image-button{height:470px;margin-top:7px}.horizontal .properties{position:absolute;left:88px;right:86px;top:774px;border-top:1px solid var(--line);padding-top:23px;display:flex;gap:46px}.properties #property-title{font-size:27px;color:var(--teal);padding-top:3px;white-space:nowrap}.properties p{font-size:28px;line-height:1.55}.properties p span{color:var(--muted)}.properties i{font-weight:600}.exercise h2{font-size:47px}.answers{position:absolute;left:100px;top:254px;width:355px}.answers>div{display:flex;align-items:center;height:87px;gap:14px;font-size:37px}.answers i{width:39px;font-size:47px}.answer-bracket{color:#91b9ba;font-family:Arial,sans-serif;white-space:pre;display:flex;gap:19px;align-items:center}.answer-bracket b{display:inline-block;width:27px;visibility:hidden;color:var(--teal);font-size:45px;font-weight:500}.answer-bracket b.shown{visibility:visible}.exercise-diagram{left:512px;top:190px;width:977px;height:586px}.exercise .options{position:absolute;left:92px;right:92px;bottom:64px;display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:28px;font-size:28px;color:var(--navy)}.construction h2{font-size:42px;line-height:1.6;letter-spacing:0}.construction h2 i{font-size:46px}.construction-diagram{left:111px;top:241px;width:760px;height:587px}.construction-steps{position:absolute;left:1000px;right:80px;top:302px}.construction-steps h3{font-size:25px;font-weight:400;color:var(--muted);margin-bottom:39px}.construction-steps>div{display:flex;gap:22px;align-items:center;height:100px;border-top:1px solid var(--line);color:#9caeaf}.step-no{font-size:21px;font-family:Arial,sans-serif}.construction-steps p{font-size:29px}.construction-steps i{font-size:35px}.construction-steps .revealed{display:none}.construction-steps .done{color:var(--ink)}.construction-steps .done .pending{display:none}.construction-steps .done .revealed{display:inline}.construction-steps .current{color:var(--teal)}.construction-steps .current .step-no{color:var(--teal);font-weight:bold}.toolbar{height:62px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 24px;width:min(1440px,100%);font-size:13px}.toolbar>div{display:flex;align-items:center;gap:8px}.toolbar button{color:var(--ink);background:transparent;padding:9px 12px;border-radius:6px;white-space:nowrap}.toolbar button:hover:not(:disabled){background:#dbe7e6}.toolbar .primary{background:var(--navy);color:#fff;padding:10px 24px;min-width:112px}.toolbar .primary:hover:not(:disabled){background:#28556b}#page-count{min-width:42px;text-align:center;font-variant-numeric:tabular-nums;color:var(--muted)}#step-count{font-size:12px;color:var(--muted);width:80px;margin-left:4px}#prev-page,#next-page{font:24px Arial,sans-serif;padding:3px 8px}.keyboard-hint{height:22px;flex-shrink:0;font-size:11px;color:#72868d;letter-spacing:.02em}dialog{border:0;border-radius:12px;padding:26px;box-shadow:0 25px 100px #13324144;color:var(--ink);font-family:var(--font);max-width:95vw}dialog::backdrop{background:#18354388;backdrop-filter:blur(5px)}.dialog-top{display:flex;align-items:center;justify-content:space-between;gap:30px;margin-bottom:18px}.dialog-top h3{font-size:19px;font-weight:500}.dialog-top button{background:#edf3f2;color:var(--ink);border-radius:5px;padding:5px 12px;font-size:16px}.menu-items{display:grid;gap:8px;min-width:490px}.menu-items>button{padding:20px;text-align:left;font-size:17px;border-radius:5px;background:#f0f5f4;display:flex;gap:22px;color:var(--ink)}.menu-items span{color:var(--teal)}.menu-items small{margin-left:auto;color:var(--muted);font-size:12px;align-self:center}.menu-items>button.selected{background:#dfede7}#zoom-dialog{width:95vw;height:93vh;max-height:95vh;overflow:hidden}#zoom-scroll{height:calc(100% - 60px);overflow:auto;text-align:center;background:white}#zoom-image{height:100%;width:100%;object-fit:contain;max-width:none;vertical-align:top}.zoom-controls{display:flex;gap:12px;align-items:center}.zoom-controls span{font-size:13px;min-width:40px}#app:fullscreen{background:#eaf0f1}#app:fullscreen .app-bar,#app:fullscreen .keyboard-hint{display:none}#app:fullscreen .toolbar{height:52px} @media(max-width:850px){.toolbar{gap:3px;padding:0 8px;font-size:11px}.toolbar button{padding:8px 6px}.toolbar .primary{padding:9px 12px;min-width:90px}.toolbar>div{gap:3px}#step-count{width:60px;font-size:10px}.keyboard-hint{font-size:10px}.app-bar{padding:0 14px;font-size:11px}.menu-items{min-width:0}.menu-items>button{gap:10px;font-size:14px}.zoom-controls{gap:4px}.dialog-top{gap:8px}.dialog-top button{padding:5px 8px}}@media(max-width:600px){.toolbar{flex-wrap:wrap;height:97px;justify-content:center}.nav-pages{order:1}.nav-tools{order:2}.nav-steps{order:3;width:100%;justify-content:center}.app-bar{gap:10px;height:40px}.keyboard-hint{font-size:9px}.app-bar .muted{display:none}.zoom-controls #zoom-fit{display:none}#app:fullscreen .toolbar{height:88px}}@media print{body{background:white}#app{display:block;height:auto;overflow:visible}.app-bar,.toolbar,.keyboard-hint{display:none}#viewport{display:block}#stage{position:static;transform:none!important;box-shadow:none;width:1600px;height:auto;overflow:visible}.slide{display:block!important;position:relative;width:1600px;height:900px;break-after:page} @page{size:16in 9in;margin:0}}
+
+.image-button svg{display:block;width:100%;height:100%;overflow:visible}
+.diagram-button{display:block;width:100%;height:100%;background:none;padding:0}
+.diagram-button svg{width:100%;height:100%;display:block;overflow:visible}
+svg{--diagram-ink:#213e50;--diagram-accent:#247f9c;--diagram-green:#1c897c}
+svg line,svg polygon,svg path{stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.edge{stroke:var(--diagram-ink);stroke-width:2;fill:none}.axis{stroke:#344e5b;stroke-width:1.8;fill:none}
+.projection-plane{stroke:#789aa6;stroke-width:1.45;fill:#eff6f7}.v-plane{fill:#f0f5f8}.w-plane{fill:#eaf4f3}.h-plane{fill:#f3f7f4}
+.body-edge{stroke:#6d828b;stroke-width:1.5;fill:none}.body-projection{stroke:#91a5ac;stroke-width:1.25;fill:none}
+.surface{stroke:#1b746e;stroke-width:2.5;fill:#b7ded1;fill-opacity:.8}
+.projection-result{stroke:var(--diagram-ink);stroke-width:3;fill:none}.surface.projection-result{fill:#b7ded1;fill-opacity:.65;stroke:#1b746e}
+.ray{stroke:#3699a5;stroke-width:1.4;fill:none}.result{stroke:#1b746e;stroke-width:3.4;fill:none}
+.label,.axis-label,.plane-label,.small-label,.view-label,.face-letter{fill:var(--diagram-ink);font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:27px;text-anchor:middle;stroke:none}
+.small-label{font-size:22px}.axis-label{font-size:28px}.plane-label{font-size:31px;fill:#486f79}.point-label{font-size:26px}
+.solid-face{stroke:var(--diagram-ink);stroke-width:1.8;fill:white;transition:fill .35s,stroke .35s}
+.solid-face.focus-face{fill:#d6eee5;stroke:#25877d;stroke-width:2.4}.face-projection{fill:transparent;stroke:transparent;stroke-width:3;pointer-events:none}
+.face-projection.focus-projection{fill:#99d4c044;stroke:#278c80}.view-label{font-size:31px}.face-letter{font-size:32px;fill:#1a5763}
+.leader{stroke:#496779;stroke-width:1;fill:none}.view-direction{stroke:#344f60;stroke-width:2.7}.arrow-head{fill:#344f60;stroke:none}
+.given-projector{stroke:#7f939b;stroke-width:1.4}.given-boundary{stroke:var(--diagram-ink);stroke-width:3;fill:none}
+.given-point{stroke:var(--diagram-ink);stroke-width:1.8;fill:#fff}
+.construction-line{stroke:#247f9c;stroke-width:2.4;fill:none}.construction-guide{stroke:#329aa1;stroke-width:1.7;fill:none}
+.construction-point{stroke:#247f9c;stroke-width:1.8;fill:#fff}.answer-point{stroke:#18836f;stroke-width:2;fill:#fff}
+.answer-label{fill:#18836f;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:29px}
+.off{display:none!important}.enter .draw,.enter.draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw-line .9s ease-out forwards}
+.enter .delayed{animation:label-appear .25s .8s backwards}.enter:not(svg g){animation:label-appear .3s ease-out}
+.enter .surface{animation:label-appear .6s ease-out}.enter .label,.enter .small-label,.enter .face-letter,.enter .view-label{animation:label-appear .25s .75s backwards}
+.label,.small-label,.face-letter,.view-label{paint-order:stroke;stroke:#fff;stroke-width:1.7px;stroke-linejoin:round}
+@keyframes draw-line{to{stroke-dashoffset:0}}@keyframes label-appear{from{opacity:0}to{opacity:1}}
+.horizontal figure{top:216px;height:517px}.horizontal .diagram-button{height:510px;margin-top:2px}.left-diagram{left:70px;width:683px}.right-diagram{left:796px;width:728px}
+.horizontal .properties{top:776px}.exercise-diagram{left:492px;top:190px;width:1028px;height:590px}.answers{left:94px;top:250px}
+.answer-bracket b{visibility:visible}.answer-bracket{min-width:102px}.answer-bracket b.off{display:inline-block!important;visibility:hidden}
+.construction-diagram{left:120px;top:244px;width:770px;height:590px}.construction-steps{left:1010px;top:290px}
+.construction-steps p{font-size:28px}.construction-steps h3{margin-bottom:29px}.construction-steps>div{height:99px}.construction-steps .revealed{font-size:28px}
+.app-bar .identity{font-size:13px}#step-caption{font-size:12px;color:#57717c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52vw;margin:0 auto}
+.toolbar{width:100%;gap:8px}.toolbar button{padding:9px 10px}.nav-tools{gap:4px!important}.nav-steps{gap:5px!important}.toolbar .primary{padding:10px 19px}
+.keyboard-hint{font-size:10px;height:20px}#zoom-content{width:100%;height:100%;margin:0 auto}#zoom-content svg{width:100%;height:100%;display:block}
+#app:fullscreen #step-caption{display:none}#app:fullscreen .app-bar{display:none}
+@media(prefers-reduced-motion:reduce){.enter .draw,.enter.draw{animation:none;stroke-dasharray:none;stroke-dashoffset:0}.enter .delayed{animation:none}}
+@media(max-width:1100px){.toolbar{font-size:11px;padding:0 10px}.toolbar button{padding:8px 6px}.toolbar .primary{padding:9px 13px}#step-count{width:66px}.app-bar .identity{font-size:11px}}
+@media(max-width:720px){#step-caption{display:none}.app-bar{height:36px}.toolbar{height:95px;flex-wrap:wrap;justify-content:center}.nav-pages{order:1}.nav-tools{order:2}.nav-steps{order:3;width:100%;justify-content:center}.keyboard-hint{font-size:9px}#app:fullscreen .toolbar{height:86px}}
+/* Quiet editorial typography, warm paper, ink-green chapter margins. */
+:root{--ink:#233d37;--navy:#213d35;--teal:#648071;--muted:#7b857c;--line:#d7ddd4;--paper:#fafaf6}
+body,#app:fullscreen{background:#dce2dc}.app-bar{color:#53665c}.keyboard-hint{color:#6f7d73}
+#stage{background:#fafaf6;box-shadow:0 16px 60px #253d3018}.slide{background:#fafaf6}
+h1,h2{font-family:"Songti SC","Noto Serif CJK SC","SimSun",serif;font-weight:500!important}
+.slide:not(.cover){padding:64px 78px}.eyebrow{font-size:19px;letter-spacing:3px;color:#74877b;display:flex;align-items:center;gap:22px;margin-bottom:24px}.eyebrow:after{content:"";height:1px;width:70px;background:#a7b5a8}
+h2{font-size:51px;letter-spacing:1px;line-height:1.5}
+.cover{background:#f6f6ef}.cover:before{content:"";position:absolute;left:995px;top:0;bottom:0;width:605px;background:#263f35}
+.cover:after{content:"";position:absolute;left:80px;right:80px;bottom:76px;height:1px;background:linear-gradient(90deg,#b3bfb0 0 59%,#607466 59%)}
+.cover-rule{left:84px;top:85px;width:34px;height:3px;background:#738877}.cover-course{left:143px;top:76px;font-size:22px;letter-spacing:7px;color:#667669}
+.cover-lecture{left:86px;top:315px;font-size:22px;letter-spacing:8px;color:#768675}.cover h1{left:75px;top:391px;font-size:109px;letter-spacing:2px;color:#263f35;line-height:1.4}
+.cover-number{right:85px;top:255px;font-family:Georgia,"Times New Roman",serif;font-size:325px;font-weight:400;letter-spacing:-19px;color:#6e8270}
+.horizontal:before{content:"";position:absolute;inset:0 auto 0 0;width:462px;background:#edf0e8;border-right:1px solid #dce1d6}
+.horizontal>.eyebrow,.horizontal>h2,.horizontal>.relation{position:relative;width:340px;z-index:1}
+.horizontal>.eyebrow{margin-top:8px;margin-bottom:46px;font-size:18px;letter-spacing:1px}.horizontal>.eyebrow:after{width:34px}
+.horizontal h2{font-size:53px;line-height:1.43;letter-spacing:0;width:340px}
+.horizontal .relation{font-size:25px;margin-top:31px;line-height:1.6}.horizontal .relation .math{display:block;font-size:28px;margin:5px 0 0 -8px}
+.horizontal figure{top:146px;height:590px}.horizontal figure figcaption{text-align:left;font-size:22px;letter-spacing:2px;color:#647a6b;padding-left:52px;margin-bottom:28px}
+.horizontal .left-diagram{left:488px;width:504px}.horizontal .right-diagram{left:1045px;width:500px}.horizontal .diagram-button{height:538px;margin-top:0}
+.horizontal .properties{left:78px;right:auto;width:317px;top:496px;padding-top:24px;display:block;border-top:1px solid #bccabc;gap:0}
+.properties #property-title{font-size:19px;letter-spacing:3px;padding-top:0;margin-bottom:19px;color:#607767}.properties p{font-size:24px;line-height:1.8;margin-bottom:20px;color:#435749}.properties p span{color:#8a9787;font-family:Georgia,serif}.properties i{font-size:25px;font-weight:400}
+.exercise .eyebrow{margin-bottom:22px}.exercise h2{font-size:48px;letter-spacing:1px}
+.answers{left:80px;top:241px;width:325px;border-top:1px solid #afbfaf}.answers>div{height:87px;gap:14px;font-size:28px;border-bottom:1px solid #d7dfd2}.answers i{font-size:45px;width:39px;color:#314c3d}.answer-bracket{color:#a7b9a6;min-width:89px;gap:12px}.answer-bracket b{color:#497a5f;font-size:35px}
+.exercise-diagram{left:476px;top:199px;width:1060px;height:567px}.exercise .options{left:80px;right:80px;bottom:66px;font-size:24px;padding-top:22px;color:#556e5c}
+.construction:before{content:"";position:absolute;inset:0 auto 0 0;width:447px;background:#263f35}
+.construction>.eyebrow,.construction>h2{position:relative;z-index:1}.construction .eyebrow{color:#bdc9b6;margin-top:5px;margin-bottom:56px}.construction .eyebrow:after{background:#748772}
+.construction h2{width:296px;font-size:34px;line-height:1.8;letter-spacing:.8px;color:#f1f2e6}.construction h2 i{font-size:37px;color:#f1f2e6}.construction h2 br{display:block;content:"";margin-top:22px}
+.construction-diagram{left:460px;top:123px;width:746px;height:674px}.construction-steps{left:1250px;right:68px;top:256px}
+.construction-steps h3{font-size:19px;letter-spacing:3px;color:#879080;margin-bottom:33px}.construction-steps>div{height:107px;gap:12px;border-top:1px solid #d2dccd}.construction-steps .step-no{font-family:Georgia,serif;font-size:19px;color:#99aa95}.construction-steps p,.construction-steps .revealed{font-size:22px}.construction-steps i{font-size:25px}.construction-steps .pending{color:#a2ad9c;font-size:21px}.construction-steps .current,.construction-steps .current .step-no{color:#416d53}
+svg{--diagram-ink:#344e42;--diagram-accent:#517d6a;--diagram-green:#507d5b}.label,.small-label,.face-letter,.view-label{stroke:#fafaf6}
+.axis{stroke:#627264}.projection-plane{stroke:#9baa96;fill:#f0f3eb}.v-plane{fill:#edf2e9}.w-plane{fill:#e7eee3}.h-plane{fill:#f1f3e9}.plane-label{fill:#71856b}
+.body-edge{stroke:#8b9a83}.body-projection{stroke:#b0bbab}.surface{stroke:#638263;fill:#c2d5b7}.surface.projection-result{stroke:#638263;fill:#c2d5b7}.ray{stroke:#789c8c}.result{stroke:#577b59}
+.solid-face{fill:#fafaf6;stroke:#3a5645}.solid-face.focus-face{fill:#dce8d1;stroke:#6d8a60}.face-projection.focus-projection{fill:#c6d9b649;stroke:#6d8a60}.face-letter{fill:#486c4f}
+.given-boundary{stroke:#34543f}.given-projector{stroke:#9bab98}.given-point,.construction-point,.answer-point{fill:#fafaf6}.construction-line{stroke:#557f6c}.construction-guide{stroke:#84a592}.answer-point{stroke:#50714e}.answer-label{fill:#50714e}
+.toolbar button{border-radius:3px;color:#4d6151}.toolbar .primary{background:#304d3b;color:#f5f5ea}.toolbar .primary:hover:not(:disabled){background:#44634d}.toolbar button:hover:not(:disabled){background:#ccd6c9}
+.menu-items>button{background:#eff2e9}.menu-items>button.selected{background:#dce5d4}dialog{background:#fafaf6}#zoom-scroll{background:#fafaf6}
+</style></head>
+<body><div id="app"><nav aria-label="课程导航" style="width:100%;flex-shrink:0;display:flex;gap:20px;flex-wrap:wrap;padding:14px 24px;background:#fff;border-bottom:1px solid #dce5e5;font:16px/1.7 Microsoft YaHei,sans-serif"><a href="index.html#lectures">← 课程目录</a></nav>
+<header class="app-bar"><span class="identity">画法几何 <span class="muted">/ 平面的投影</span></span><span id="step-caption" aria-live="polite"></span></header>
+<main id="viewport" aria-label="16:9 课件演示"><div id="stage">
+<section class="slide cover" data-slide="0" aria-label="封面"><div class="cover-rule"></div><div class="cover-course">画法几何</div><div class="cover-number" aria-hidden="true">04</div><div class="cover-lecture">第 四 讲</div><h1>平面的投影</h1></section>
+<section class="slide horizontal" data-slide="1" aria-label="水平面的投影特性"><div class="eyebrow">（一）特殊位置平面</div><h2>投影面平行面的投影特性</h2><p class="relation">水平面 <span class="math">（∥ H，⊥ V，⊥ W）</span></p>
+<figure class="left-diagram"><figcaption>立体图</figcaption><button class="diagram-button" id="space-figure" data-zoom aria-label="放大立体图"></button></figure>
+<figure class="right-diagram"><figcaption>水平面的三面投影</figcaption><button class="diagram-button" id="views-figure" data-zoom aria-label="放大三面投影"></button></figure>
+<div class="properties"><div id="property-title" data-at="13">投影特性</div><div id="property-text" data-at="14"><p><span>（1）</span><i>ABCDEF</i> 平面在水平面上，水平投影反映实形。</p><p><span>（2）</span>正面投影和侧面投影均积聚为横直线。</p></div></div></section>
+<section class="slide exercise" data-slide="2" aria-label="例1 判断平面位置"><div class="eyebrow">例 1</div><h2>判断各平面对于投影面的相对位置</h2><div class="answers">
+<div><i>P</i><span>是</span><span class="answer-bracket">[ <b data-at="3" data-answer="P">b</b> ]</span><span>面；</span></div>
+<div><i>Q</i><span>是</span><span class="answer-bracket">[ <b data-at="6" data-answer="Q">f</b> ]</span><span>面；</span></div>
+<div><i>R</i><span>是</span><span class="answer-bracket">[ <b data-at="9" data-answer="R">e</b> ]</span><span>面；</span></div>
+<div><i>S</i><span>是</span><span class="answer-bracket">[ <b data-at="12" data-answer="S">a</b> ]</span><span>面；</span></div>
+<div><i>T</i><span>是</span><span class="answer-bracket">[ <b data-at="15" data-answer="T">c</b> ]</span><span>面。</span></div></div>
+<figure class="exercise-diagram"><button class="diagram-button" id="exercise-figure" data-zoom aria-label="放大例1图形"></button></figure><div class="options"><span>a. 水平面</span><span>b. 正平面</span><span>c. 侧平面</span><span>d. 铅垂面</span><span>e. 正垂面</span><span>f. 侧垂面</span></div></section>
+<section class="slide construction" data-slide="3" aria-label="例2 求点的另一投影"><div class="eyebrow">例 2</div><h2>已知 <i>△ABC</i> 及其上一点 <i>K</i> 的 <i>V</i> 面投影 <i>k′</i>，<br>求作点 <i>K</i> 的另一投影 <i>k</i>。</h2>
+<figure class="construction-diagram"><button class="diagram-button" id="construction-figure" data-zoom aria-label="放大例2作图"></button></figure>
+<div class="construction-steps"><h3>作图过程</h3><div data-process="1"><span class="step-no">01</span><p><span class="pending">第 1 步</span><span class="revealed">延长 <i>a′k′</i>，得 <i>d′</i></span></p></div><div data-process="2"><span class="step-no">02</span><p><span class="pending">第 2 步</span><span class="revealed">由 <i>d′</i> 求得 <i>d</i></span></p></div><div data-process="3"><span class="step-no">03</span><p><span class="pending">第 3 步</span><span class="revealed">连接 <i>ad</i></span></p></div><div data-process="4"><span class="step-no">04</span><p><span class="pending">第 4 步</span><span class="revealed">由 <i>k′</i> 求得 <i>k</i></span></p></div></div></section>
+</div></main>
+<nav class="toolbar" aria-label="演示控制"><div class="nav-pages"><button id="menu">☰ 目录</button><button id="prev-page" aria-label="上一页">‹</button><span id="page-count"></span><button id="next-page" aria-label="下一页">›</button></div><div class="nav-steps"><button id="prev-step">上一步</button><button id="next-step" class="primary">开始演示 →</button><span id="step-count" aria-live="polite"></span></div><div class="nav-tools"><button id="play">自动演示</button><button id="restart">重播本页</button><button id="show-all">显示全部</button><button id="fullscreen">全屏</button></div></nav><div class="keyboard-hint">← → / 空格：分步演示　·　点击图形可放大　·　A：显示全部　·　R：重播　·　F：全屏</div></div>
+<dialog id="menu-dialog"><div class="dialog-top"><h3>课件目录</h3><button data-close aria-label="关闭目录">×</button></div><div class="menu-items"><button data-go="0"><span>01</span>封面</button><button data-go="1"><span>02</span>水平面</button><button data-go="2"><span>03</span>例 1 · 判断平面位置</button><button data-go="3"><span>04</span>例 2 · 求点的另一投影</button></div></dialog>
+<dialog id="zoom-dialog"><div class="dialog-top"><h3 id="zoom-title">图形放大</h3><div class="zoom-controls"><button id="zoom-out" aria-label="缩小">−</button><span id="zoom-percent">100%</span><button id="zoom-in" aria-label="放大">＋</button><button id="zoom-fit">适合窗口</button><button data-close aria-label="关闭放大">×</button></div></div><div id="zoom-scroll"><div id="zoom-content"></div></div></dialog>
+<script>// Single-file source. Every diagram is generated from geometric coordinates.
+// No PPT assets, screenshots, paths, raster images or external libraries are imported.
+'use strict';
+(() => {
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const xy=p=>p.map(v=>+v.toFixed(3)).join(',');
+const attrs=o=>Object.entries(o).map(([k,v])=>` ${k}="${esc(v)}"`).join('');
+const tag=(t,a={},body='')=>`<${t}${attrs(a)}>${body}</${t}>`;
+const L=(a,b,c='edge',more={})=>tag('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],class:c,pathLength:1,...more});
+const P=(points,c='edge',more={})=>tag('polygon',{points:points.map(xy).join(' '),class:c,pathLength:1,...more});
+const T=(p,text,c='label',more={})=>tag('text',{x:p[0],y:p[1],class:c,...more},esc(text));
+const D=(p,c='point',more={})=>tag('circle',{cx:p[0],cy:p[1],r:4.5,class:c,...more});
+const G=(step,body,more={})=>tag('g',{'data-at':step,...more},body);
+const plus=(a,b)=>a.map((v,i)=>v+b[i]);
+const lerp=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
+const center=a=>a[0].map((_,i)=>a.reduce((s,p)=>s+p[i],0)/a.length);
+const shifted=(p,dx,dy)=>[p[0]+dx,p[1]+dy];
+function distinctEdges(faces,project){const seen=new Set();let out='';for(const face of faces){const p=face.map(project);for(let i=0;i<p.length;i++){const a=p[i],b=p[(i+1)%p.length];if(Math.hypot(a[0]-b[0],a[1]-b[1])<.01)continue;const key=[xy(a),xy(b)].sort().join('|');if(!seen.has(key)){seen.add(key);out+=L(a,b);}}}return out;}
+function svg(id,box,body,title){return `<svg id="${id}" viewBox="${box}" role="img" aria-label="${esc(title)}" xmlns="http://www.w3.org/2000/svg"><title>${esc(title)}</title>${body}</svg>`;}
+
+// Horizontal plane ABCDEF: one six-vertex concave polygon at a constant height.
+// x is leftward in V, y is depth, z is height. Projections delete one coordinate.
+const horizontal={A:[150,195,180],B:[80,195,180],C:[80,95,180],D:[240,95,180],E:[240,140,180],F:[195,140,180]};
+const names=Object.keys(horizontal),world=Object.values(horizontal),height=180,lower=110;
+const iso=p=>[315-.82*p[0]+.82*p[1],340+.46*p[0]+.46*p[1]-.9*p[2]];
+const hp=p=>[p[0],p[1],0],vp=p=>[p[0],0,p[2]],wp=p=>[0,p[1],p[2]];
+const plan=p=>[315-p[0],300+p[1]],front=p=>[315-p[0],300-p[2]],side=p=>[315+p[1],300-p[2]];
+const hull3=project=>{
+ const values=project===vp?world.map(p=>p[0]):world.map(p=>p[1]);const lo=Math.min(...values),hi=Math.max(...values);
+ return project===vp?[[lo,0,lower],[hi,0,lower],[hi,0,height],[lo,0,height]]:[[0,lo,lower],[0,hi,lower],[0,hi,height],[0,lo,height]];
+};
+const rays=project=>world.map(p=>L(iso(p),iso(project(p)),'ray draw')).join('');
+function horizontalSpace(){
+ const o=[0,0,0],X=[300,0,0],Y=[0,300,0],Z=[0,0,300],XY=[300,300,0],XZ=[300,0,300],YZ=[0,300,300];
+ // Occlude only the axes, using the projected top and visible side faces.
+ // Keep plane fills intact and draw the outer plane boundary independently.
+ const occluders=[world];const nearSide=['D','E','F','A','B'];
+ for(let i=0;i<nearSide.length-1;i++){const a=horizontal[nearSide[i]],b=horizontal[nearSide[i+1]];occluders.push([a,b,[b[0],b[1],lower],[a[0],a[1],lower]]);}
+ let s=tag('defs',{},tag('mask',{id:'space-axis-mask',maskUnits:'userSpaceOnUse',x:0,y:0,width:630,height:650,style:'mask-type:luminance'},tag('rect',{x:0,y:0,width:630,height:650,fill:'white'})+G(1,occluders.map(face=>P(face.map(iso),'',{fill:'black',stroke:'black','stroke-width':1})).join(''))));
+ s+=P([o,X,XZ,Z].map(iso),'projection-plane v-plane',{style:'stroke:none'})+P([o,Y,YZ,Z].map(iso),'projection-plane w-plane',{style:'stroke:none'})+P([o,X,XY,Y].map(iso),'projection-plane h-plane',{style:'stroke:none'});
+ const outer=[X,XZ,Z,YZ,Y,XY];s+=outer.map((p,i)=>L(iso(p),iso(outer[(i+1)%outer.length]),'projection-plane',{style:'fill:none'})).join('');
+ s+=tag('g',{mask:'url(#space-axis-mask)'},L(iso(o),iso(X),'axis')+L(iso(o),iso(Y),'axis')+L(iso(o),iso(Z),'axis'));
+ s+=T([62,501],'X','axis-label')+T([565,501],'Y','axis-label')+T([315,56],'Z','axis-label')+T([91,233],'V','plane-label')+T([539,233],'W','plane-label')+T([315,600],'H','plane-label');
+ const lowerPoints=Object.fromEntries(names.map(n=>[n,[horizontal[n][0],horizontal[n][1],lower]]));
+ const visible=['D','E','F','A','B'];let solid=P(world.map(iso),'body-edge draw');
+ for(let i=0;i<visible.length-1;i++)solid+=L(iso(lowerPoints[visible[i]]),iso(lowerPoints[visible[i+1]]),'body-edge draw');
+ for(const n of visible)solid+=L(iso(horizontal[n]),iso(lowerPoints[n]),'body-edge draw');
+ s+=G(1,solid);
+ s+=G(2,P(hull3(vp).map(iso),'body-projection draw')+[150,195].map(x=>L(iso([x,0,lower]),iso([x,0,height]),'body-projection draw')).join(''));
+ s+=G(3,P(world.map(hp).map(iso),'body-projection draw'));
+ s+=G(4,P(hull3(wp).map(iso),'body-projection draw')+L(iso([0,140,lower]),iso([0,140,height]),'body-projection draw'));
+ const offsets={A:[7,23],B:[9,6],C:[0,-12],D:[-18,7],E:[-10,28],F:[3,26]};
+ s+=G(5,P(world.map(iso),'surface')+names.map(n=>T(plus(iso(horizontal[n]),offsets[n]),n,'label point-label')).join(''));
+ const hOffsets={A:[3,24],B:[14,8],C:[2,-12],D:[-18,6],E:[-5,27],F:[4,25]};
+ s+=G(6,rays(hp)+P(world.map(hp).map(iso),'surface projection-result')+names.map(n=>T(plus(iso(hp(horizontal[n])),hOffsets[n]),n.toLowerCase(),'label point-label')).join(''));
+ s+=G(7,rays(vp)+L(iso([80,0,height]),iso([240,0,height]),'result draw')+T(shifted(iso([240,0,height]),-8,-14),'e′(d′)','small-label')+T(shifted(iso([195,0,height]),1,-27),'f′','small-label')+T(shifted(iso([150,0,height]),1,-13),'a′','small-label')+T(shifted(iso([80,0,height]),0,-25),'b′(c′)','small-label'));
+ s+=G(8,rays(wp)+L(iso([0,95,height]),iso([0,195,height]),'result draw')+T(shifted(iso([0,95,height]),-5,-33),'d″(c″)','small-label')+T(shifted(iso([0,140,height]),8,-14),'e″(f″)','small-label')+T(shifted(iso([0,195,height]),24,-4),'a″(b″)','small-label'));
+ return svg('space-svg','25 30 590 600',s,'由实体的水平顶面 ABCDEF 得到水平面、正面和侧面投影');
+}
+function horizontalViews(){
+ let axes=L([25,300],[605,300],'axis draw')+L([315,35],[315,555],'axis draw')+L([315,300],[554,539],'axis draw');
+ axes+=T([15,305],'X','axis-label')+T([329,286],'O','axis-label')+T([315,22],'Z','axis-label');
+ axes+=tag('text',{x:614,y:308,class:'axis-label'},'Y'+tag('tspan',{'baseline-shift':'sub','font-size':'65%'},'W'))+tag('text',{x:327,y:580,class:'axis-label'},'Y'+tag('tspan',{'baseline-shift':'sub','font-size':'65%'},'H'));
+ let s=G(9,axes);
+ const offsets={A:[0,27],B:[4,27],C:[10,-5],D:[-15,-4],E:[-16,20],F:[-2,25]};
+ s+=G(10,P(world.map(plan),'projection-result draw')+names.map(n=>T(plus(plan(horizontal[n]),offsets[n]),n.toLowerCase(),'label')).join(''));
+ let vGuides='';for(const x of [...new Set(world.map(p=>p[0]))]){const pp=world.filter(p=>p[0]===x).sort((a,b)=>b[1]-a[1])[0];vGuides+=L(plan(pp),front(pp),'ray draw');}
+ s+=G(11,vGuides+L(front([240,0,height]),front([80,0,height]),'result draw')+T([68,89],'e′(d′)','small-label')+T([120,110],'f′','small-label')+T([165,90],'a′','small-label')+T([239,110],'b′(c′)','small-label'));
+ let wGuides='';for(const y of [...new Set(world.map(p=>p[1]))]){const p=world.filter(p=>p[1]===y).sort((a,b)=>a[0]-b[0])[0];const corner=[315+y,300+y];wGuides+=L(plan(p),corner,'ray draw')+L(corner,side(p),'ray draw');}
+ s+=G(12,wGuides+L(side([0,95,height]),side([0,195,height]),'result draw')+T([405,89],'d″(c″)','small-label')+T([455,110],'e″(f″)','small-label')+T([521,89],'a″(b″)','small-label'));
+ return svg('views-svg','0 0 650 610',s,'水平面的三面投影：水平投影为实形，正面和侧面投影为横直线');
+}
+
+// The five faces belong to a single stepped solid. Face equations:
+// P: y=106; Q: y+0.29z=106; R: x+0.43z=288; S: z=200; T: x=115.
+// Its projections reproduce the trapezoid, notched plan and sloping side edge.
+const faces={
+ P:[[0,106,0],[115,106,0],[115,106,200],[0,106,200]],
+ Q:[[115,106,0],[288,106,0],[202,48,200],[115,48,200]],
+ R:[[288,0,0],[288,106,0],[202,48,200],[202,0,200]],
+ S:[[0,0,200],[202,0,200],[202,48,200],[115,48,200],[115,106,200],[0,106,200]],
+ T:[[115,106,0],[115,106,200],[115,48,200]]
+};
+const faceNames=['P','Q','R','S','T'];
+const eFront=p=>[390-p[0],285-p[2]], ePlan=p=>[390-p[0],370+p[1]],eSide=p=>[545+p[1],285-p[2]];
+const eIso=p=>[790-.90*p[0]+.67*p[1],540+.17*p[0]+.24*p[1]-.86*p[2]];
+function exercise(){
+ let s=tag('defs',{},tag('marker',{id:'view-arrow',markerWidth:9,markerHeight:7,refX:8,refY:3.5,orient:'auto',markerUnits:'strokeWidth'},P([[0,0],[8,3.5],[0,7]],'arrow-head')));
+ // Single-source face geometry generates all three views.
+ for(const project of [eFront,ePlan,eSide])s+=distinctEdges(Object.values(faces),project);
+ for(const name of ['R','Q','P','T','S'])s+=P(faces[name].map(eIso),'solid-face',{'data-space-face':name});
+ s+=L([928,619],[863,596],'view-direction',{'marker-end':'url(#view-arrow)'});
+ const labels={
+ P:{space:[805,504],v:[340,185],h:[345,507],w:[674,185]},
+ Q:{space:[684,516],v:[236,183],h:[240,448],w:[602,270]},
+ R:{space:[590,519],v:[118,180],h:[154,411],w:[578,204]},
+ S:{space:[799,402],v:[340,63],h:[345,416],w:[599,62]},
+ T:{space:[747,454],v:[258,268],h:[257,532],w:[626,130]}
+ };
+ for(const [idx,n] of faceNames.entries()){
+  const stage=idx*3+1,l=labels[n];
+  s+=G(stage,T(l.space,n,'face-letter',n==='S'?{style:'font-size:26px'}:{}),{'data-label-face':n});
+  let overlays='';for(const project of [eFront,ePlan,eSide])overlays+=P(faces[n].map(project),'face-projection',{'data-projection-face':n});
+  let texts=T(l.v,n.toLowerCase()+'′','view-label')+T(l.h,n.toLowerCase(),'view-label')+T(l.w,n.toLowerCase()+'″','view-label');
+  if(n==='Q')texts+=L([607,249],[625,210],'leader');
+  if(n==='T')texts+=L([260,247],[275,211],'leader')+L([262,508],[275,463],'leader');
+  s+=G(stage+1,overlays+texts);
+ }
+ return svg('exercise-svg','40 15 925 625',s,'由同一空间实体计算的 P、Q、R、S、T 五个面的三视图和立体图');
+}
+
+// Example 2 uses actual line intersection and affine projection, not screen traces.
+const axis=337;
+const A=[150,192,102],B=[268,58,272],C=[438,250,136];
+const f=p=>[p[0],axis-p[2]],h=p=>[p[0],axis+p[1]];
+const knownKFront=[239,186];
+const cross=(a,b)=>a[0]*b[1]-a[1]*b[0],sub=(a,b)=>a.map((v,i)=>v-b[i]);
+function intersection(a,b,c,d){const u=sub(b,a),v=sub(d,c);const t=cross(sub(c,a),v)/cross(u,v);return lerp(a,b,t);}
+const dp=intersection(f(A),knownKFront,f(B),f(C));
+const dRatio=(dp[0]-B[0])/(C[0]-B[0]);const dWorld=lerp(B,C,dRatio),kRatio=(knownKFront[0]-A[0])/(dWorld[0]-A[0]),kWorld=lerp(A,dWorld,kRatio);
+function construction(){
+ let s=L([43,axis],[564,axis],'axis')+T([17,axis+7],'X','axis-label')+T([588,axis+7],'O','axis-label');
+ for(const [n,p] of [['a',A],['b',B],['c',C]]){
+  s+=L(f(p),h(p),'given-projector');
+  const vf=n==='a'?[-19,4]:n==='b'?[-1,-16]:[19,8],hf=n==='a'?[-18,22]:n==='b'?[17,0]:[15,18];
+  s+=T(plus(f(p),vf),n+'′','label')+T(plus(h(p),hf),n,'label');
+ }
+ s+=P([A,B,C].map(f),'given-boundary')+P([A,B,C].map(h),'given-boundary');
+ s+=G(1,L(f(A),dp,'construction-line draw')+D(dp,'construction-point delayed')+T(shifted(dp,15,-8),'d′','label delayed'));
+ s+=G(2,L(dp,h(dWorld),'construction-guide draw')+D(h(dWorld),'construction-point delayed')+T(shifted(h(dWorld),16,-4),'d','label delayed'));
+ s+=G(3,L(h(A),h(dWorld),'construction-line draw'));
+ s+=G(4,L(knownKFront,h(kWorld),'construction-guide draw')+D(h(kWorld),'answer-point delayed')+T(shifted(h(kWorld),12,29),'k','answer-label delayed'));
+ s+=D(knownKFront,'given-point')+T(shifted(knownKFront,-12,-17),'k′','label');
+ return svg('construction-svg','0 28 630 610',s,'先作 a′k′ 交 b′c′ 得 d′，投影得 d，连接 ad，再由 k′ 求得 k');
+}
+$('#space-figure').innerHTML=horizontalSpace();$('#views-figure').innerHTML=horizontalViews();$('#exercise-figure').innerHTML=exercise();$('#construction-figure').innerHTML=construction();
+
+const maxSteps=[0,14,15,4],steps=[0,0,0,0];
+const titles=['封面','水平面','例 1 · 判断平面位置','例 2 · 求点的另一投影'];
+const hCaptions=['三投影面体系','建立实体','实体的正面投影','实体的水平投影','实体的侧面投影','选取水平顶面 ABCDEF','顶面向 H 面投影','顶面向 V 面投影','顶面向 W 面投影','建立三面投影坐标','画水平投影','画正面投影','画侧面投影','观察投影特性','归纳投影特性'];
+const cCaptions=['已知条件','连接并延长 a′k′，交 b′c′ 于 d′','由 d′ 向下作投影线，交 bc 于 d','连接 ad','由 k′ 向下作投影线，交 ad 于 k'];
+let page=0,zoom=1,zoomKey=null,playing=false,timer=null;
+const query=new URLSearchParams(location.search);page=Math.min(3,Math.max(0,(parseInt(query.get('page'),10)||1)-1));
+if(query.get('view')==='complete')maxSteps.forEach((n,i)=>steps[i]=n);
+const caption=()=>page===1?hCaptions[steps[1]]:page===2?(steps[2]===0?'观察题图':`${faceNames[Math.floor((steps[2]-1)/3)]}：${['辨认空间面','观察三面投影','揭示答案'][(steps[2]-1)%3]}`):page===3?cCaptions[steps[3]]:'';
+function updateLayers(animate=false){
+ $$('.slide').forEach((slide,i)=>{
+  slide.querySelectorAll('[data-at]').forEach(el=>{
+   const show=Number(el.dataset.at)<=steps[i],was=el.classList.contains('off');
+   el.classList.toggle('off',!show);el.classList.remove('enter');
+   if(show&&was&&animate&&i===page){void el.getBoundingClientRect();el.classList.add('enter');}
+  });
+ });
+ const active=steps[2]>0?faceNames[Math.floor((steps[2]-1)/3)]:null;
+ $$('[data-space-face]').forEach(el=>el.classList.toggle('focus-face',el.dataset.spaceFace===active));
+ $$('[data-projection-face]').forEach(el=>el.classList.toggle('focus-projection',el.dataset.projectionFace===active));
+ $$('[data-process]').forEach(el=>{const n=Number(el.dataset.process);el.classList.toggle('done',n<=steps[3]);el.classList.toggle('current',n===steps[3]);});
+}
+function render(animate=false){
+ $$('.slide').forEach((s,i)=>{s.classList.toggle('active',i===page);s.inert=i!==page;s.setAttribute('aria-hidden',i!==page);});
+ updateLayers(animate);
+ $('#page-count').textContent=`${page+1} / 4`;
+ $('#step-count').textContent=maxSteps[page]?`${steps[page]} / ${maxSteps[page]} 步`:'';$('#step-caption').textContent=caption();
+ $('#prev-page').disabled=page===0;$('#next-page').disabled=page===3;$('#prev-step').disabled=steps[page]===0;
+ $('#restart').disabled=steps[page]===0;$('#show-all').disabled=steps[page]===maxSteps[page];
+ $('#next-step').disabled=page===3&&steps[page]===maxSteps[page];
+ $('#next-step').textContent=page===0?'开始演示 →':steps[page]<maxSteps[page]?'下一步 →':page===3?'已完成':'下一页 →';
+ $('#play').disabled=maxSteps[page]===0||steps[page]===maxSteps[page];$('#play').textContent=playing?'暂停':'自动演示';
+ $$('[data-go]').forEach(e=>e.classList.toggle('selected',Number(e.dataset.go)===page));
+ document.title="讲义4 平面的投影 · 画法几何";
+ window.deckState={page,step:steps[page],steps:[...steps],maxSteps:[...maxSteps],playing};
+ if(zoomKey)refreshZoom();
+}
+function fit(){const r=$('#viewport').getBoundingClientRect();$('#stage').style.transform=`scale(${Math.max(.05,Math.min((r.width-18)/1600,(r.height-10)/900))})`;}
+function stop(){playing=false;clearTimeout(timer);timer=null;}
+function next(){stop();if(steps[page]<maxSteps[page]){steps[page]++;render(true);}else if(page<3){page++;render();}}
+function back(){stop();if(steps[page]>0)steps[page]--;else if(page>0)page--;render();}
+function go(n){stop();page=Math.max(0,Math.min(3,n));render();}
+function playTick(){if(!playing)return;if(steps[page]>=maxSteps[page]){stop();render();return;}steps[page]++;render(true);timer=setTimeout(playTick,2800);}
+$('#next-step').onclick=next;$('#prev-step').onclick=()=>{stop();steps[page]=Math.max(0,steps[page]-1);render();};
+$('#prev-page').onclick=()=>go(page-1);$('#next-page').onclick=()=>go(page+1);
+$('#restart').onclick=()=>{stop();steps[page]=0;render();};$('#show-all').onclick=()=>{stop();steps[page]=maxSteps[page];render();};
+$('#play').onclick=()=>{if(playing){stop();render();}else{playing=true;playTick();}};
+$('#menu').onclick=()=>{stop();render();$('#menu-dialog').showModal();};
+$$('[data-go]').forEach(b=>b.onclick=()=>{go(Number(b.dataset.go));$('#menu-dialog').close();});
+$$('[data-close]').forEach(b=>b.onclick=()=>b.closest('dialog').close());
+$('#zoom-dialog').addEventListener('close',()=>{zoomKey=null;$('#zoom-content').replaceChildren();});
+function refreshZoom(){const original=document.getElementById(zoomKey);const clone=original.cloneNode(true);clone.querySelectorAll('[id]').forEach(e=>e.id=`zoom-${e.id}`);clone.removeAttribute('id');for(const attr of ['marker-end','mask','clip-path'])clone.querySelectorAll('['+attr+']').forEach(e=>e.setAttribute(attr,e.getAttribute(attr).replace('#','#zoom-')));clone.querySelectorAll('.enter').forEach(e=>e.classList.remove('enter'));$('#zoom-content').replaceChildren(clone);}
+function setZoom(n){zoom=Math.max(1,Math.min(3,n));$('#zoom-content').style.width=`${zoom*100}%`;$('#zoom-content').style.height=`${zoom*100}%`;$('#zoom-percent').textContent=`${Math.round(zoom*100)}%`;$('#zoom-out').disabled=zoom===1;$('#zoom-in').disabled=zoom===3;}
+$$('[data-zoom]').forEach(b=>b.onclick=()=>{stop();render();zoomKey=b.querySelector('svg').id;$('#zoom-title').textContent=b.getAttribute('aria-label').replace('放大','');refreshZoom();setZoom(1);$('#zoom-dialog').showModal();$('#zoom-scroll').scrollTo(0,0);});
+$('#zoom-in').onclick=()=>setZoom(zoom+.25);$('#zoom-out').onclick=()=>setZoom(zoom-.25);$('#zoom-fit').onclick=()=>{setZoom(1);$('#zoom-scroll').scrollTo(0,0);};
+async function fullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else await $('#app').requestFullscreen();}catch(e){$('#fullscreen').textContent='请使用 F11';}}
+$('#fullscreen').onclick=fullscreen;document.addEventListener('fullscreenchange',()=>{$('#fullscreen').textContent=document.fullscreenElement?'退出全屏':'全屏';fit();});
+document.addEventListener('keydown',e=>{
+ if(e.altKey||e.ctrlKey||e.metaKey)return;
+ if($$('dialog').some(d=>d.open))return;
+ if((e.key===' '||e.key==='Enter')&&e.target.closest('button,input,select,textarea'))return;
+ const k=e.key.toLowerCase();
+ if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next();}
+ else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();back();}
+ else if(k==='r'){$('#restart').click();}else if(k==='a'){$('#show-all').click();}else if(k==='f')fullscreen();else if(k==='m')$('#menu').click();else if(e.key==='Home')go(0);else if(e.key==='End')go(3);
+});
+new ResizeObserver(fit).observe($('#viewport'));window.addEventListener('resize',fit);
+window.addEventListener('beforeprint',()=>{stop();maxSteps.forEach((n,i)=>steps[i]=n);render();});
+window.geometryAudit={horizontal,faces,example2:{A,B,C,axis,knownKFront,dp,dWorld,kWorld,dRatio,kRatio},model:'All views generated from shared 3D vertices; no extracted assets.'};
+render();fit();
+})();
+</script></body></html>
