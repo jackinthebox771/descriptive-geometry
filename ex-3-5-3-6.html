@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>作业 3.5-3(6) · 画法几何</title>
+<style>
+:root{--ink:#20333e;--muted:#75828a;--accent:#007f79;--line:#dce5e5;--paper:#fff;--bg:#f3f6f5;--new:#dd663c}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Microsoft YaHei","PingFang SC",sans-serif}button,select,input{font:inherit}button,select{border:1px solid var(--line);background:white;color:var(--ink);border-radius:8px;padding:8px 13px;cursor:pointer}button:hover{border-color:var(--accent);background:#f0f8f6}button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #f4b77b;outline-offset:3px}button:disabled{opacity:.4;cursor:default}.primary{background:var(--accent);color:white;border-color:var(--accent)}.primary:hover{background:#006b66;color:white}.shell{max-width:1520px;margin:auto;padding:26px 36px 20px}.eyebrow{font-size:12px;letter-spacing:2px;color:var(--accent);font-weight:700}header{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:20px}h1{font-size:28px;line-height:1.3;margin:5px 0 10px}header p{margin:0;font-size:15px;max-width:950px}.header-actions{flex-shrink:0}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 320px;background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden}.drawing{min-width:0;border-right:1px solid var(--line)}.toolbar{padding:13px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #edf1f0;gap:8px}.toolbar strong{font-size:14px}.tools{display:flex;gap:5px;align-items:center}.tools button{padding:3px 10px}.tools output{min-width:48px;text-align:center;font-size:12px;color:var(--muted)}.canvas{height:min(59vw,620px);min-height:420px;overflow:hidden;touch-action:none;cursor:grab}.canvas:active{cursor:grabbing}svg{width:100%;height:100%;display:block}svg line,svg path,svg circle{vector-effect:non-scaling-stroke}svg .given{stroke:#354b55;fill:none;stroke-width:1.2}svg .guide{stroke:#a4b3b9;fill:none;stroke-width:1.2;stroke-dasharray:none}svg .construction{stroke:#008b84;fill:none;stroke-width:1.2}svg .answer{stroke:#008b84;fill:none;stroke-width:3}svg .projection{stroke:#354b55;fill:none;stroke-width:2}svg text{font:italic 23px Georgia,"Times New Roman",serif;fill:#354b55;paint-order:stroke;stroke:white;stroke-width:5px;stroke-linejoin:round}svg text.note{font:16px "Microsoft YaHei",sans-serif}svg .point{fill:white;stroke-width:1.2}svg .fresh line,svg .fresh path,svg .fresh circle{stroke:var(--new)}svg .fresh text{fill:var(--new)}svg .fresh{animation:reveal .55s ease-out}@keyframes reveal{from{opacity:0}to{opacity:1}}.legend{display:flex;gap:24px;flex-wrap:wrap;padding:9px 22px 14px;font-size:12px;color:var(--muted)}.legend span:before{content:"";display:inline-block;width:19px;height:2px;vertical-align:middle;margin-right:7px;background:#354b55}.legend span:nth-child(2):before{background:var(--new)}.legend span:nth-child(3):before{background:var(--accent)}aside{padding:26px 24px;display:flex;flex-direction:column}.count{color:var(--accent);font-size:12px;letter-spacing:1px;font-weight:700}h2{font-size:23px;margin:10px 0 22px;line-height:1.45}.explain-label{font-size:12px;color:var(--muted);margin:0 0 5px}.explain{font-size:15px;margin:0 0 20px}.reason{border-left:3px solid #b6d9d4;padding-left:14px}.formula{font-family:Georgia,"Microsoft YaHei",serif;color:var(--accent);font-size:18px;margin-top:8px}.tip{margin-top:auto;padding-top:20px;font-size:13px;color:#6b777c}.controls{background:white;border:1px solid var(--line);border-radius:12px;margin-top:14px;padding:16px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}.controls .range-wrap{flex:1;min-width:160px;display:flex;align-items:center;gap:12px}input[type=range]{width:100%;accent-color:var(--accent)}.progress-text{white-space:nowrap;color:var(--muted);font-size:13px}.steps{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}.step-button{font-size:12px;padding:7px 10px;background:transparent}.step-button[aria-current=step]{background:var(--ink);border-color:var(--ink);color:white}.foot{color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:15px}.checks{margin-top:18px;border-top:1px solid var(--line);padding-top:13px}.checks summary{cursor:pointer;font-size:14px}.checks p{font-size:14px;margin:8px 0}.checks ul{font-size:14px;padding-left:22px}dialog{max-width:1000px;width:92vw;max-height:90vh;border:0;border-radius:16px;padding:24px;box-shadow:0 25px 90px #18313c40}dialog::backdrop{background:#152b36aa}dialog img{width:100%;display:block}dialog .dialog-head{display:flex;justify-content:space-between;align-items:center}dialog h2{margin:0}dialog p{font-size:14px}.status{color:#a44426;font-size:13px}.shell:fullscreen{max-width:none;overflow:auto;background:var(--bg)}@media(min-width:1450px){.canvas{height:660px}}@media(max-width:1000px){.shell{padding:20px}.workspace{grid-template-columns:minmax(0,1fr) 275px}aside{padding:20px}.toolbar{padding:12px}.canvas{min-height:400px}.legend{gap:12px}h1{font-size:25px}}@media(max-width:720px){.shell{padding:16px 12px}.eyebrow{font-size:10px}header{align-items:flex-start;flex-direction:column;gap:10px}h1{font-size:23px}header p{font-size:14px}.workspace{display:flex;flex-direction:column}.drawing{border-right:0;border-bottom:1px solid var(--line)}.canvas{height:76vw;min-height:270px}.toolbar{padding:10px}.toolbar strong{font-size:12px}aside{padding:20px}h2{margin:7px 0 15px;font-size:21px}.tip{padding-top:2px}.controls{padding:12px;gap:8px}.controls button{font-size:13px;padding:8px 10px}.controls .range-wrap{flex-basis:100%}.controls select{font-size:13px}.foot{flex-direction:column;gap:4px}.legend{font-size:11px;padding:8px 12px}.steps{gap:5px}.step-button{font-size:11px}}
+header h1{font-size:22px;line-height:1.65;font-weight:500;margin:4px 0;max-width:1250px}@media(max-width:720px){header h1{font-size:18px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+
+.legend span:first-child:before{background:#0864c9}
+.axis{stroke:#82929b;stroke-width:1;stroke-dasharray:none;fill:none}.analysis{stroke:#dd663c;stroke-width:5;fill:none;opacity:.55}.given{stroke:#0864c9!important;stroke-width:2!important}.model-panel{margin-top:16px;background:white;border:1px solid var(--line);border-radius:14px;overflow:hidden}.model-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:14px 20px}.model-bar p{margin:0;flex:1;color:#61717a;font-size:13px}.model-content{padding:0 20px 18px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px}.model-stage{height:350px;border:1px solid #dce5e5;border-radius:12px;background:linear-gradient(#f2f8f9,#fff);touch-action:none;cursor:grab}.model-stage:active{cursor:grabbing}.model-help{font-size:14px}.model-help select{width:100%;margin:8px 0}.model-help button{margin:4px 2px}.selection-overlay{pointer-events:none}.selection-overlay path{stroke:#b72a80;stroke-width:4;fill:#e346a32b;stroke-linejoin:round}.selection-overlay circle{stroke:#b72a80;stroke-width:3;fill:#f9d8ed}.model-stage path:focus-visible{outline:none;stroke:#b72a80;stroke-width:4}.model-note{font-size:12px;color:#75828a}[hidden]{display:none!important}@media(max-width:720px){.model-content{grid-template-columns:1fr}.model-stage{height:290px}}
+/* Put the model beside the drawing for direct comparison. */
+.teaching-overlay{pointer-events:none}
+.teaching-overlay path{stroke:#b72a80;stroke-width:3;fill:#e346a32b;stroke-linejoin:round}
+.teaching-overlay circle{stroke:#b72a80;stroke-width:3;fill:#f9d8ed}
+.workspace>.model-panel{margin:0;border:0;border-radius:0;border-top:1px solid var(--line)}
+.model-bar{padding:9px 14px}.model-bar p{display:none}
+.model-content{padding:0 12px 12px;display:flex;flex-direction:column;gap:6px}
+.model-stage{width:100%;height:200px;min-height:0;flex:1}
+.model-help{font-size:12px;line-height:1.45}
+.model-help>strong,.model-help>label,.model-note{display:none}
+.model-help>p:not(#modelSelection){margin:0 0 4px;font-size:12px}
+.model-help select{padding:3px 6px;margin:3px 0;font-size:12px}
+.model-help button{padding:3px 8px;font-size:12px;margin:2px 0}
+#modelSelection{margin:3px 0 0;font-size:12px}
+.axis line{stroke-linecap:round}
+@media(min-width:1000px) and (min-height:600px){
+ .shell{height:100dvh;max-width:calc(100dvh * 16 / 9);padding:12px 18px;display:flex;flex-direction:column;gap:8px}
+ header{margin:0;gap:12px;flex-shrink:0}header h1{font-size:20px;line-height:1.5}
+ header button{padding:5px 10px}
+ .workspace{flex:1;min-height:0;grid-template-columns:minmax(0,1fr) 330px;grid-template-rows:minmax(0,1fr) auto}
+ .workspace.model-open{grid-template-rows:minmax(0,.92fr) minmax(0,1.08fr)}
+ .drawing{grid-column:1;grid-row:1/3;display:flex;flex-direction:column;min-height:0}
+ .toolbar{padding:8px 14px;flex-shrink:0}
+ .canvas{height:auto;min-height:0;flex:1}
+ aside{grid-column:2;grid-row:1;padding:12px 16px;min-height:0}
+ .count{font-size:11px}h2{font-size:19px;margin:5px 0 10px}
+ .explain{font-size:13px;line-height:1.65;margin:0 0 10px}.explain-label{font-size:11px;margin:0 0 3px}
+ .reason{padding-left:10px}.formula{font-size:14px;margin-top:4px}
+ .workspace>.model-panel{grid-column:2;grid-row:2;min-height:0;display:flex;flex-direction:column}
+ .model-bar{flex-shrink:0;padding:6px 12px}.model-bar button{padding:4px 9px;font-size:12px}
+ .model-content{flex:1;min-height:0;padding-bottom:8px}.model-help{flex-shrink:0}
+ .model-help>p:not(#modelSelection){font-size:11px;line-height:1.4}
+ .controls{flex-shrink:0;margin:0;padding:8px 12px;gap:8px}
+ .controls button,.controls select{font-size:12px;padding:5px 8px}
+ .steps{flex-shrink:0;margin:0;gap:5px}.step-button{padding:4px 7px;font-size:11px}
+ .foot{font-size:10px;flex-shrink:0}#status:empty{display:none}
+}
+@media(min-width:1000px) and (max-height:780px) and (min-height:600px){
+ .shell{padding:8px 12px;gap:6px}.workspace{grid-template-columns:minmax(0,1fr) 310px}
+ aside{padding:9px 12px}.explain{font-size:12px;line-height:1.5;margin-bottom:7px}h2{font-size:17px;margin-bottom:7px}
+ .model-help>p:not(#modelSelection){display:none}
+}
+@media(max-width:999px){.workspace>.model-panel{grid-column:1/-1}.model-stage{flex:auto;height:230px}}
+@media(min-width:1000px) and (min-height:600px){.workspace.model-open{grid-template-rows:minmax(0,1fr) minmax(0,1fr)}}
+.header-actions{display:flex;gap:6px;align-items:center}.header-actions select{font-size:12px;padding:5px 8px}.model-help select{max-width:100%}@media(max-width:720px){.header-actions{width:100%;justify-content:flex-end}}.axis.fresh line{stroke:#82929b!important}</style></head><body><nav aria-label="课程导航" style="display:flex;gap:20px;flex-wrap:wrap;padding:14px 24px;background:#fff;border-bottom:1px solid #dce5e5;font:16px/1.7 Microsoft YaHei,sans-serif"><a href="index.html#assignments">← 课程目录</a><a href="ex-3-5-3-5.html">上一题</a><a href="ex-3-5-3-6a.html">下一题 →</a></nav><main class="shell" id="app">
+<header><div><h1 id="title"></h1></div><div class="header-actions"><select id="exercisePicker" aria-label="选择题目"><option value="1">3.5-3(1)</option><option value="2">3.5-3(2)</option><option value="3">3.5-3(3)</option><option value="4">3.5-3(4)</option><option value="5">3.5-3(5)</option><option value="6" selected>3.5-3(6)</option></select> <button id="fullscreen">全屏</button></div></header>
+<section class="workspace"><div class="drawing"><div class="toolbar"><strong id="diagramTitle">投影作图</strong><div class="tools"><button id="zoomOut" aria-label="缩小">−</button><output id="zoomValue">100%</output><button id="zoomIn" aria-label="放大">＋</button><button id="fit">复位</button></div></div><div class="canvas" id="canvas"><svg id="diagram" role="img" aria-label="逐步显示的二维投影作图"><title id="svgTitle"></title><g id="scene"></g></svg></div></div>
+<aside aria-live="polite"><div class="count" id="count"></div><h2 id="stepTitle"></h2><p class="explain-label">作图操作</p><p class="explain" id="action"></p><div class="reason"><p class="explain-label">为什么这样作</p><p class="explain" id="reason"></p><div class="formula" id="formula"></div></div></aside></section>
+<section class="model-panel"><div class="model-bar"><button id="toggleModel" aria-expanded="false" aria-controls="modelContent">显示 3D 模型</button><p>先独立补图，再展开模型核对；点击棱线或面，联动查看三个投影。</p></div><div id="modelContent" class="model-content" hidden><svg id="model" class="model-stage" viewBox="0 0 620 350" aria-label="可旋转、缩放、选择棱线和面的三维模型"></svg><div class="model-help"><strong>拖动旋转 · 滚轮缩放</strong><p>点击面内部选面，点击边缘选棱线。紫色表示该对象在三个投影中的对应位置；面可能积聚成线，棱线可能积聚成点。</p><label for="faceSelect">也可按名称选择面</label><select id="faceSelect"><option value="">选择一个面…</option></select><div><button id="modelMinus" aria-label="缩小三维模型">−</button><button id="modelPlus" aria-label="放大三维模型">＋</button><button id="modelReset">复位视角</button><button id="clearSelection">清除高亮</button></div><p id="modelSelection" role="status">尚未选择线或面</p><p class="model-note">模型按题图比例与平面形体构建；题目未给尺寸，未添加尺寸标注。联动高亮为临时分析层，不改变作图进度。</p></div></div></section><div class="controls"><button id="prev">← 上一步</button><button id="next" class="primary">下一步 →</button><button id="play">播放</button><select id="speed" aria-label="自动播放间隔"><option value="6000">每步 6 秒</option><option value="10000">每步 10 秒</option><option value="3000">每步 3 秒</option></select><div class="range-wrap"><input id="progress" type="range" min="0" value="0" aria-label="选择作图步骤"><span id="progressText" class="progress-text"></span></div><button id="restart">重新开始</button><button id="complete">完整解答</button></div>
+<nav class="steps" id="steps" aria-label="解题步骤"></nav><div class="foot"><span>方向键切换步骤 · 空格播放 / 暂停 · 放大后拖动作图区域</span></div>
+<p id="status" class="status" role="status"></p>
+</main>
+<script id="lesson-data" type="application/json">{"title": "作业3.5-3(6)", "problem": "根据形体的两面投影，补画第三面投影。", "size": [740, 600], "points": {"p0": [95.0, 55.0], "p1": [191.04395604395603, 55.0], "p2": [95.0, 130.16483516483515], "p3": [191.04395604395603, 55.0], "p4": [95.0, 55.0], "p5": [95.0, 245.0], "p6": [95.0, 245.0], "p7": [333.02197802197804, 245.0], "p8": [333.02197802197804, 245.0], "p9": [333.02197802197804, 130.16483516483515], "p10": [191.04395604395603, 130.16483516483515], "p11": [333.02197802197804, 130.16483516483515], "p12": [191.04395604395603, 130.16483516483515], "p13": [191.04395604395603, 55.0], "p14": [95.0, 345.0], "p15": [333.02197802197804, 345.0], "p16": [191.04395604395603, 345.0], "p17": [191.04395604395603, 533.9560439560439], "p18": [95.0, 345.0], "p19": [191.04395604395603, 533.9560439560439], "p20": [95.0, 533.9560439560439], "p21": [333.02197802197804, 533.9560439560439], "p22": [95.0, 345.0], "p23": [95.0, 533.9560439560439], "p24": [333.02197802197804, 345.0], "p25": [333.02197802197804, 533.9560439560439], "p26": [55, 290], "p27": [720, 290], "p28": [430, 35], "p29": [430, 570], "p30": [430, 290], "p31": [715, 575], "p32": [333.02197802197804, 245.0], "p33": [673.9560439560439, 245.0], "p34": [191.04395604395603, 55.0], "p35": [673.9560439560439, 55.0], "p36": [333.02197802197804, 345.0], "p37": [485.0, 345.0], "p38": [485.0, 345.0], "p39": [485.0, 55.0], "p40": [333.02197802197804, 533.9560439560439], "p41": [673.9560439560439, 533.9560439560439], "p42": [673.9560439560439, 533.9560439560439], "p43": [673.9560439560439, 55.0], "p44": [485.0, 55.0], "p45": [673.9560439560439, 55.0], "p46": [673.9560439560439, 55.0], "p47": [673.9560439560439, 245.0], "p48": [485.0, 245.0], "p49": [673.9560439560439, 245.0], "p50": [485.0, 245.0], "p51": [485.0, 55.0], "p52": [333.02197802197804, 130.16483516483515], "p53": [673.9560439560439, 130.16483516483515], "p54": [191.04395604395603, 55.0], "p55": [673.9560439560439, 55.0], "p56": [333.02197802197804, 345.0], "p57": [485.0, 345.0], "p58": [485.0, 345.0], "p59": [485.0, 55.0], "p60": [333.02197802197804, 533.9560439560439], "p61": [673.9560439560439, 533.9560439560439], "p62": [673.9560439560439, 533.9560439560439], "p63": [673.9560439560439, 55.0], "p64": [485.0, 55.0], "p65": [673.9560439560439, 130.16483516483515], "p66": [333.02197802197804, 130.16483516483515], "p67": [673.9560439560439, 130.16483516483515], "p68": [333.02197802197804, 345.0], "p69": [485.0, 345.0], "p70": [485.0, 345.0], "p71": [485.0, 55.0], "p72": [333.02197802197804, 533.9560439560439], "p73": [673.9560439560439, 533.9560439560439], "p74": [673.9560439560439, 533.9560439560439], "p75": [673.9560439560439, 55.0], "p76": [485.0, 130.16483516483515], "p77": [673.9560439560439, 130.16483516483515]}, "layers": [{"id": "given", "step": 0, "role": "given", "elements": [{"type": "line", "from": "p0", "to": "p1"}, {"type": "line", "from": "p2", "to": "p3"}, {"type": "line", "from": "p4", "to": "p5"}, {"type": "line", "from": "p6", "to": "p7"}, {"type": "line", "from": "p8", "to": "p9"}, {"type": "line", "from": "p10", "to": "p11"}, {"type": "line", "from": "p12", "to": "p13"}, {"type": "line", "from": "p14", "to": "p15"}, {"type": "line", "from": "p16", "to": "p17"}, {"type": "line", "from": "p18", "to": "p19"}, {"type": "line", "from": "p20", "to": "p21"}, {"type": "line", "from": "p22", "to": "p23"}, {"type": "line", "from": "p24", "to": "p25"}]}, {"id": "axes", "step": 1, "role": "axis", "elements": [{"type": "line", "from": "p26", "to": "p27"}, {"type": "line", "from": "p28", "to": "p29"}, {"type": "line", "from": "p30", "to": "p31"}, {"type": "text", "xy": [55, 278], "text": "X", "note": true}, {"type": "text", "xy": [435, 45], "text": "Z", "note": true}, {"type": "text", "xy": [435, 578], "text": "Y_H", "note": true}, {"type": "text", "xy": [700, 278], "text": "Y_W", "note": true}, {"type": "text", "xy": [409, 278], "text": "O", "note": true}]}, {"id": "guides-2", "step": 2, "role": "guide", "elements": [{"type": "line", "from": "p32", "to": "p33"}, {"type": "line", "from": "p34", "to": "p35"}, {"type": "line", "from": "p36", "to": "p37"}, {"type": "line", "from": "p38", "to": "p39"}, {"type": "line", "from": "p40", "to": "p41"}, {"type": "line", "from": "p42", "to": "p43"}], "endStep": 2}, {"id": "feature-2", "step": 2, "role": "answer", "elements": [{"type": "line", "from": "p44", "to": "p45"}, {"type": "line", "from": "p46", "to": "p47"}, {"type": "line", "from": "p48", "to": "p49"}, {"type": "line", "from": "p50", "to": "p51"}]}, {"id": "guides-3", "step": 3, "role": "guide", "elements": [{"type": "line", "from": "p52", "to": "p53"}, {"type": "line", "from": "p54", "to": "p55"}, {"type": "line", "from": "p56", "to": "p57"}, {"type": "line", "from": "p58", "to": "p59"}, {"type": "line", "from": "p60", "to": "p61"}, {"type": "line", "from": "p62", "to": "p63"}], "endStep": 3}, {"id": "feature-3", "step": 3, "role": "answer", "elements": [{"type": "line", "from": "p64", "to": "p65"}]}, {"id": "guides-4", "step": 4, "role": "guide", "elements": [{"type": "line", "from": "p66", "to": "p67"}, {"type": "line", "from": "p68", "to": "p69"}, {"type": "line", "from": "p70", "to": "p71"}, {"type": "line", "from": "p72", "to": "p73"}, {"type": "line", "from": "p74", "to": "p75"}], "endStep": 4}, {"id": "feature-4", "step": 4, "role": "answer", "elements": [{"type": "line", "from": "p76", "to": "p77", "dash": "8 6"}]}], "steps": [{"title": "读题：补画左视图", "short": "读题", "action": "上方为正视图，下方为俯视图。在正视图右侧补画左视图。", "reason": "按题图中的平面形体分析台阶、斜面及缺口；正视图定高，俯视图定宽。", "formula": "V 定高 · H 定宽 → W"}, {"title": "先画投影轴", "short": "投影轴", "action": "画水平、竖直投影轴与右下方 45° 转向线。", "reason": "正、俯视图长对正，正、左视图高平齐；宽度通过同一个转向交点传递。", "formula": "长对正 · 高平齐 · 宽相等"}, {"title": "确定矩形外轮廓", "short": "外轮廓", "action": "转移前后边界和最高、最低位置，画左视图矩形外轮廓。", "reason": "左部顶面虽含斜面，但右侧高边沿全宽达到最高处。从左侧投射，整体仍覆盖全宽、全高。", "formula": "外轮廓由整体投射范围确定"}, {"title": "分析倾斜三角面", "short": "斜面边线", "action": "将正视图斜线左端的低位高度转移到左视图前端，连接后端最高位置，补画下降斜实线。", "reason": "该三角面为一般位置平面，在 V、H、W 面均呈三角形；三个投影均不是积聚直线，不能套用“两线一面”。", "formula": "一般位置平面 · 三个投影均呈面"}, {"title": "分析右部低平台", "short": "低平台虚线", "action": "把正视图低平台高度平移到左视图，补画全宽横虚线。", "reason": "低平台为水平面，H 面反映矩形。沿左侧看，平台边缘被左部实体遮住；前端与斜线端点、外轮廓相接。", "formula": "左部实体遮挡 → 全宽横虚线"}, {"title": "检查完整左视图", "short": "完整解答", "action": "移去辅助线，保留矩形、下降斜实线和低位横虚线。", "reason": "水平顶面与斜面的交线在 W 面和最高轮廓重合，不另加一条线。虚线准确接到两侧外轮廓。", "formula": "矩形 + 斜实线 + 横虚线"}], "animateConstruction": true, "teaching": {"3": [1], "4": [7]}, "targetView": 1, "geometry": [{"name": "水平三角顶面", "vertices": [[0, 0, 182], [92, 0, 182], [92, 181, 182]], "normal": [0.0, 0.0, 1.0]}, {"name": "倾斜三角面", "vertices": [[0, 0, 182.0], [92, 181, 182.0], [0, 181, 110.0]], "normal": [-0.5881262239699021, 0.2989370862167458, 0.7514946195170971]}, {"name": "底面", "vertices": [[0, 181, 0], [228, 181, 0], [228, 0, 0], [0, 0, 0]], "normal": [0.0, 0.0, -1.0]}, {"name": "后侧立面", "vertices": [[0.0, 0.0, 0.0], [228.0, 0.0, 0.0], [228.0, 0.0, 110.0], [92.0, 0.0, 110.0], [92.0, 0.0, 182.0], [0.0, 0.0, 182.0]], "normal": [0.0, -1.0, 0.0]}, {"name": "高低台分界立面", "vertices": [[92.0, 0.0, 110.0], [92.0, 181.0, 110.0], [92.0, 181.0, 182.0], [92.0, 0.0, 182.0]], "normal": [1.0, 0.0, 0.0]}, {"name": "前侧立面", "vertices": [[0.0, 181.0, 0.0], [0.0, 181.0, 110.0], [92.0, 181.0, 182.0], [92.0, 181.0, 110.0], [228.0, 181.0, 110.0], [228.0, 181.0, 0.0]], "normal": [0.0, 1.0, 0.0]}, {"name": "左侧立面", "vertices": [[0.0, 181.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 182.0], [0.0, 181.0, 110.0]], "normal": [-1.0, 0.0, 0.0]}, {"name": "右部低平台顶面", "vertices": [[92, 0, 110], [228, 0, 110], [228, 181, 110], [92, 181, 110]], "normal": [0.0, 0.0, 1.0]}, {"name": "右侧立面", "vertices": [[228.0, 0.0, 0.0], [228.0, 181.0, 0.0], [228.0, 181.0, 110.0], [228.0, 0.0, 110.0]], "normal": [1.0, 0.0, 0.0]}], "modelSize": [228, 181, 182], "projectionScale": 1.043956043956044}</script>
+<script>
+const lesson=JSON.parse(document.getElementById('lesson-data').textContent),$=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
+let current=0,timer=null,zoom=1,offset={x:0,y:0},drag=null;
+const last=lesson.steps.length-1;
+function node(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n}
+function notation(target,value,svg=false){target.replaceChildren();const re=/([PY])_([WH])/g;let start=0;for(const match of value.matchAll(re)){target.append(document.createTextNode(value.slice(start,match.index)+match[1]));const sub=svg?node('tspan',{'baseline-shift':'sub','font-size':'70%'},match[2]):document.createElement('sub');if(!svg)sub.textContent=match[2];target.append(sub);start=match.index+match[0].length}target.append(document.createTextNode(value.slice(start)))}
+function element(e){let n;const p=id=>lesson.points[id];if(e.type==='line'){const a=p(e.from),b=p(e.to);n=node('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1]})}else if(e.type==='point'){const a=p(e.at);n=node('circle',{cx:a[0],cy:a[1],r:4,class:'point'})}else if(e.type==='text'){const a=e.at?p(e.at):e.xy;n=node('text',{x:a[0]+(e.dx||0),y:a[1]+(e.dy||0),class:e.note?'note':''});notation(n,e.text,true)}else if(e.type==='path'){n=node('path',{d:e.d})}else throw Error('不支持的图形类型：'+e.type);if(e.dash)n.setAttribute('stroke-dasharray',e.dash);return n}
+function view(){const [w,h]=lesson.size;$('diagram').setAttribute('viewBox',`${(w-w/zoom)/2-offset.x} ${(h-h/zoom)/2-offset.y} ${w/zoom} ${h/zoom}`);$('zoomValue').textContent=Math.round(zoom*100)+'%';$('zoomOut').disabled=zoom<=1;$('zoomIn').disabled=zoom>=2.5}
+function render(animate=true){clearTimeout(visibilityBaseTimer);const s=lesson.steps[current];$('count').textContent=current===0?'准备 / 读题':`步骤 ${String(current).padStart(2,'0')} / ${String(last).padStart(2,'0')}`;for(const [id,key]of [['stepTitle','title'],['action','action'],['reason','reason'],['formula','formula']])notation($(id),s[key]||'');$('svgTitle').textContent=lesson.title+'：'+s.title;$('scene').replaceChildren();for(const pass of ['geometry','labels']){const container=node('g',{'data-pass':pass});for(const layer of lesson.layers){if(layer.step>current||(layer.endStep!==undefined&&current>layer.endStep))continue;const g=node('g',{class:(layer.role||'construction')+(layer.step===current&&current>0?' fresh':''),'data-layer':layer.id});for(const e of layer.elements){if((e.type==='text')===(pass==='labels')){const el=element(e);if(e.drawOrder!==undefined)el.dataset.drawOrder=e.drawOrder;if(e.at)el.dataset.at=e.at;g.append(el)}}container.append(g)}$('scene').append(container)}$('progress').value=current;$('progressText').textContent=`${current} / ${last}`;$('prev').disabled=current===0;$('next').disabled=current===last;[...$('steps').children].forEach((b,i)=>{if(i===current)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current')});view();animateStep(animate);retainVisibilityBase(animate);updateHighlight();updateTeaching(animate)}
+
+let visibilityBaseTimer=null;
+function retainVisibilityBase(enabled){
+ if(!enabled||!drawDuration||!(lesson.visibilityBaseSteps||[]).includes(current))return;
+ const base=node('g',{'data-visibility-base':String(current),class:'projection'});
+ for(const layer of lesson.layers){
+  if(layer.endStep!==current-1||!['projection','guide'].includes(layer.role)||!/-outside$|-undecided$/.test(layer.id))continue;
+  for(const e of layer.elements){if(e.type==='line'||e.type==='path')base.append(element(e))}
+ }
+ if(!base.children.length)return;
+ $('scene').prepend(base);
+ visibilityBaseTimer=setTimeout(()=>{base.remove();visibilityBaseTimer=null},drawDuration+100);
+}
+let drawDuration=0;
+function animateStep(enabled){
+ drawDuration=0;if(!lesson.animateConstruction||!enabled||current===0||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ const fresh=[...$('scene').querySelectorAll('g.fresh')];fresh.forEach(g=>g.style.animation='none');
+ const lines=fresh.flatMap(g=>[...g.children].filter(n=>n.tagName==='line'));
+ lines.sort((a,b)=>Number(a.dataset.drawOrder??999)-Number(b.dataset.drawOrder??999));
+ const duration=330,gap=90,ends=new Map(),defs=node('defs');$('scene').prepend(defs);
+ lines.forEach((n,i)=>{
+  const delay=i*(duration+gap),len=n.getTotalLength();if(!len)return;
+  const id='draw-mask-'+current+'-'+i;
+  const mask=node('mask',{id,maskUnits:'userSpaceOnUse',x:-100,y:-100,width:lesson.size[0]+200,height:lesson.size[1]+200});
+  const path=node('path',{d:`M ${n.getAttribute('x1')} ${n.getAttribute('y1')} L ${n.getAttribute('x2')} ${n.getAttribute('y2')}`});
+  path.style.cssText=`vector-effect:none;fill:none;stroke:white;stroke-width:20;stroke-dasharray:${len};stroke-dashoffset:${len}`;
+  mask.append(path);defs.append(mask);n.setAttribute('mask',`url(#${id})`);
+  n.animate([{opacity:0},{opacity:1}],{duration:1,delay,fill:'both'});
+  path.animate([{strokeDashoffset:String(len)},{strokeDashoffset:'0'}],{duration,delay,fill:'both',easing:'linear'}).finished.then(()=>n.removeAttribute('mask')).catch(()=>{});
+  const key=n.getAttribute('x2')+','+n.getAttribute('y2');ends.set(key,Math.max(ends.get(key)||0,delay+duration));
+ });
+ drawDuration=lines.length?(lines.length-1)*(duration+gap)+duration:0;
+ fresh.flatMap(g=>[...g.children].filter(n=>n.tagName==='text'||n.tagName==='circle')).forEach(n=>{
+  const at=n.dataset.at,p=at&&lesson.points[at];let delay=drawDuration;
+  if(p&&ends.has(p.join(',')))delay=ends.get(p.join(','));
+  if(current===1&&at&&/^[cdeab]w$/.test(at))delay=('cdeab'.indexOf(at[0])*3+2)*(duration+gap)+duration;
+  n.animate([{opacity:0},{opacity:1}],{duration:100,delay,fill:'both'});
+ });
+}
+
+function stop(){clearInterval(timer);timer=null;$('play').textContent='播放';$('play').setAttribute('aria-pressed','false')}
+function go(i,animate=true){stop();current=Math.max(0,Math.min(last,i));render(animate)}
+function play(){if(timer){stop();return}if(current===last){current=0;render()}$('play').textContent='暂停';$('play').setAttribute('aria-pressed','true');function schedule(){timer=setTimeout(()=>{current++;render();if(current>=last){timer=setTimeout(stop,drawDuration+150)}else schedule()},Math.max(Number($('speed').value),drawDuration+750))}schedule()}
+
+document.title=lesson.title;$('title').textContent='【'+lesson.title+'】 '+lesson.problem;$('progress').max=last;
+lesson.steps.forEach((s,i)=>{const b=document.createElement('button');b.className='step-button';notation(b,`${i===0?'准备':String(i).padStart(2,'0')} ${s.short||s.title}`);b.onclick=()=>go(i);$('steps').append(b)});
+$('prev').onclick=()=>go(current-1);$('next').onclick=()=>go(current+1);$('complete').onclick=()=>go(last,false);$('restart').onclick=()=>{zoom=1;offset={x:0,y:0};go(0)};$('play').onclick=play;$('speed').onchange=()=>{if(timer){stop();play()}};$('progress').oninput=e=>go(+e.target.value);
+$('zoomIn').onclick=()=>{zoom=Math.min(2.5,zoom+.25);view()};$('zoomOut').onclick=()=>{zoom=Math.max(1,zoom-.25);if(zoom===1)offset={x:0,y:0};view()};$('fit').onclick=()=>{zoom=1;offset={x:0,y:0};view()};
+$('canvas').onpointerdown=e=>{if(zoom===1)return;drag={x:e.clientX,y:e.clientY,ox:offset.x,oy:offset.y};$('canvas').setPointerCapture(e.pointerId)};$('canvas').onpointermove=e=>{if(!drag)return;const r=$('diagram').getBoundingClientRect(),scale=Math.min(r.width/(lesson.size[0]/zoom),r.height/(lesson.size[1]/zoom));offset={x:drag.ox+(e.clientX-drag.x)/scale,y:drag.oy+(e.clientY-drag.y)/scale};view()};$('canvas').onpointerup=$('canvas').onpointercancel=()=>drag=null;
+$('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('app').requestFullscreen()}catch{$('status').textContent='当前浏览器不支持网页全屏，可以使用浏览器的全屏功能。'}};document.addEventListener('fullscreenchange',()=>{$('fullscreen').textContent=document.fullscreenElement?'退出全屏':'全屏'});
+document.addEventListener('keydown',e=>{if(['INPUT','SELECT','BUTTON','SUMMARY'].includes(document.activeElement.tagName))return;if(e.key==='ArrowRight'){e.preventDefault();go(current+1)}if(e.key==='ArrowLeft'){e.preventDefault();go(current-1)}if(e.code==='Space'){e.preventDefault();play()}});document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
+</script><script>// Keep drawing and model in the same workspace.
+document.querySelector('.workspace').append(document.querySelector('.model-panel'));
+// All linked views use these same three-dimensional face coordinates.
+const faces=[];
+function face(name,vertices){faces.push({name,vertices,id:faces.length})}
+const geometry=lesson.geometry;
+geometry.forEach(f=>face(f.name,f.vertices));
+const normals=geometry.map(f=>f.normal),[L,D,T]=lesson.modelSize,S=lesson.projectionScale;
+let selected=null,az=.8,el=.52,modelScale=1,modelDrag=null;
+function rotated(p){const x=p[0]-L/2,y=p[1]-D/2,z=p[2]-T/2;const a=x*Math.cos(az)+y*Math.sin(az),b=-x*Math.sin(az)+y*Math.cos(az);return [a,b*Math.sin(el)-z*Math.cos(el),b*Math.cos(el)+z*Math.sin(el)]}
+function projectModel(p){const q=rotated(p);return [310+q[0]*Math.min(1.5,430/(L+D),255/T)*modelScale,175+q[1]*Math.min(1.5,430/(L+D),255/T)*modelScale,q[2]]}
+function pathD(ps){return ps.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join(' ')+' Z'}
+function choose(s){selected=s;$('faceSelect').value=s?.kind==='face'?s.id:'';$('modelSelection').textContent=s?(s.kind==='face'?'已选面：':'已选棱线：')+s.name:'尚未选择线或面';drawModel();updateHighlight()}
+function updateHighlight(){
+ $('scene').querySelector('.selection-overlay')?.remove();
+ if(!selected||$('modelContent').hidden)return;
+ $('scene').append(projectionOverlay(selected,'selection-overlay'));
+}
+function projectionOverlay(selected,className){
+ const g=node('g',{class:className,'aria-label':'空间对象的三个对应投影'});
+ const transforms=[p=>[95+S*p[0],245-S*p[2]],p=>[485+S*p[1],245-S*p[2]],p=>[95+S*p[0],345+S*p[1]]];
+ const actual=lesson.layers.filter(l=>['given','answer'].includes(l.role)).flatMap(l=>l.elements).filter(e=>e.type==='line').map(e=>({a:lesson.points[e.from],b:lesson.points[e.to],hidden:!!e.dash}));
+ for(const [view,fn] of transforms.entries()){
+  const ps=selected.vertices.map(fn),vg=node('g',{'data-view':view});g.append(vg);
+  const ptkey=p=>p.map(v=>Math.round(v*10000)/10000).join(',');
+  const unique=[...new Map(ps.map(p=>[ptkey(p),p])).values()];
+  vg.dataset.shape=unique.map(ptkey).sort().join('|');
+  if(unique.length===1){vg.append(node('circle',{cx:ps[0][0],cy:ps[0][1],r:5}));continue}
+  if(selected.kind==='face')vg.append(node('path',{d:pathD(ps),style:'stroke:none','data-face-tint':'true'}));
+  const seen=new Set(),count=selected.kind==='edge'?1:ps.length;
+  for(let i=0;i<count;i++){
+   const a=ps[i],b=ps[(i+1)%ps.length],dx=b[0]-a[0],dy=b[1]-a[1],len2=dx*dx+dy*dy;
+   if(len2<.000001)continue;
+   const collinear=p=>Math.abs((p[0]-a[0])*dy-(p[1]-a[1])*dx)<.02;
+   // Split face boundaries at visibility changes; never cover a dashed segment
+   // with a single solid face outline. Coincident visible geometry has priority.
+   for(const e of actual){
+    if(!collinear(e.a)||!collinear(e.b))continue;
+    const ts=[e.a,e.b].map(p=>((p[0]-a[0])*dx+(p[1]-a[1])*dy)/len2).sort((x,y)=>x-y);
+    const lo=Math.max(0,ts[0]),hi=Math.min(1,ts[1]);if(hi-lo<.00001)continue;
+    const c=[a[0]+lo*dx,a[1]+lo*dy],d=[a[0]+hi*dx,a[1]+hi*dy];
+    const key=[ptkey(c),ptkey(d)].sort().join('|')+'|'+e.hidden;
+    if(seen.has(key))continue;seen.add(key);
+    vg.append(node('path',{d:`M${c} L${d}`,style:'fill:none','stroke-dasharray':e.hidden?'8 6':'none','data-visibility':e.hidden?'hidden':'visible'}));
+   }
+  }
+ }
+ return g;
+}
+let teachingTimer=null,teachingEpoch=0;
+function updateTeaching(animate){
+ clearTimeout(teachingTimer);const epoch=++teachingEpoch;
+ $('scene').querySelector('.teaching-overlay')?.remove();
+ const ids=lesson.teaching[current];if(!ids)return;
+ const group=node('g',{class:'teaching-overlay'}),seen=new Set();
+ for(const id of ids){
+  const f=faces[id],part=projectionOverlay({kind:'face',vertices:f.vertices},'teaching-face');
+  for(const view of [...part.children]){
+   const key=view.dataset.view+'|'+view.dataset.shape;
+   if(seen.has(key))view.remove();else seen.add(key);
+  }
+  group.append(part);
+ }
+ const pending=[...group.querySelectorAll(`[data-view="${lesson.targetView}"]`)];
+ const delayed=animate&&drawDuration>0;
+ if(delayed)pending.forEach(n=>n.style.display='none');
+ $('scene').insertBefore(group,$('scene').querySelector('.selection-overlay'));
+ if(delayed)teachingTimer=setTimeout(()=>{
+  if(epoch!==teachingEpoch||!group.isConnected)return;
+  pending.forEach(n=>n.style.display='');
+ },drawDuration+40);
+}
+function drawModel(){
+ $('model').replaceChildren();
+ const camera=[-Math.sin(az)*Math.cos(el),Math.cos(az)*Math.cos(el),Math.sin(el)];
+ // Draw only outward-facing surfaces, then depth-sort to respect occlusion.
+ const visible=faces.filter(f=>normals[f.id].reduce((v,n,i)=>v+n*camera[i],0)>0.00001);
+ visible.sort((a,b)=>a.vertices.reduce((s,p)=>s+projectModel(p)[2],0)/a.vertices.length-b.vertices.reduce((s,p)=>s+projectModel(p)[2],0)/b.vertices.length);
+ for(const f of visible){const ps=f.vertices.map(projectModel),g=node('g',{'data-face':f.id});
+ const shape=node('path',{d:pathD(ps),fill:selected?.kind==='face'&&selected.id===f.id?'#e6a0cb':['#b7d8df','#a5c9d4','#d1e7e9'][f.id%3],stroke:'#446570','stroke-width':1.6,tabindex:0,role:'button','aria-label':f.name});
+ shape.dataset.face=f.id;shape.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();choose({kind:'face',id:f.id,name:f.name,vertices:f.vertices})}};g.append(shape);
+ f.vertices.forEach((a,i)=>{const b=f.vertices[(i+1)%f.vertices.length],pa=ps[i],pb=ps[(i+1)%ps.length];const hit=node('line',{x1:pa[0],y1:pa[1],x2:pb[0],y2:pb[1],stroke:'transparent','stroke-width':12,'data-edge':i,'data-face':f.id});g.append(hit)});
+ $('model').append(g);
+ }
+ if(selected?.kind==='edge'){
+  const [a,b]=selected.vertices.map(projectModel);$('model').append(node('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:'#b72a80','stroke-width':4,'pointer-events':'none'}));
+ }
+ $('modelMinus').disabled=modelScale<=.6;$('modelPlus').disabled=modelScale>=1.7;
+}
+faces.forEach(f=>{const o=document.createElement('option');o.value=f.id;o.textContent=f.name;$('faceSelect').append(o)});
+$('faceSelect').onchange=e=>{if(e.target.value===''){choose(null);return}const f=faces[+e.target.value];choose({kind:'face',id:f.id,name:f.name,vertices:f.vertices})};
+$('toggleModel').onclick=()=>{const hidden=!$('modelContent').hidden;$('modelContent').hidden=hidden;document.querySelector('.workspace').classList.toggle('model-open',!hidden);$('toggleModel').textContent=hidden?'显示 3D 模型':'隐藏 3D 模型';$('toggleModel').setAttribute('aria-expanded',!hidden);drawModel();updateHighlight()};
+function modelZoom(delta){modelScale=Math.min(1.7,Math.max(.6,modelScale+delta));drawModel()}
+$('modelMinus').onclick=()=>modelZoom(-.1);$('modelPlus').onclick=()=>modelZoom(.1);
+$('modelReset').onclick=()=>{az=.8;el=.52;modelScale=1;drawModel()};$('clearSelection').onclick=()=>choose(null);
+$('model').addEventListener('wheel',e=>{e.preventDefault();modelZoom(e.deltaY>0?-.08:.08)},{passive:false});
+$('model').onpointerdown=e=>{modelDrag={x:e.clientX,y:e.clientY,az,el,target:e.target,moved:false};$('model').setPointerCapture(e.pointerId)};
+$('model').onpointermove=e=>{if(!modelDrag)return;const dx=e.clientX-modelDrag.x,dy=e.clientY-modelDrag.y;if(Math.hypot(dx,dy)>4)modelDrag.moved=true;if(modelDrag.moved){az=modelDrag.az+dx*.009;el=Math.min(1.5,Math.max(-1.5,modelDrag.el+dy*.009));drawModel()}};
+$('model').onpointerup=e=>{if(!modelDrag)return;const d=modelDrag;modelDrag=null;if(d.moved)return;const t=d.target;if(t.dataset.face!==undefined){const f=faces[+t.dataset.face];if(t.dataset.edge!==undefined){const i=+t.dataset.edge;choose({kind:'edge',name:f.name+'的棱线',vertices:[f.vertices[i],f.vertices[(i+1)%f.vertices.length]]})}else choose({kind:'face',id:f.id,name:f.name,vertices:f.vertices})}else choose(null)};
+$('model').onpointercancel=()=>modelDrag=null;
+$('exercisePicker').onchange=e=>location.href='作业3.5-3('+e.target.value+').html';
+render();drawModel();
+</script></body></html>
