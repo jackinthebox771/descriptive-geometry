@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>作业 4.1-3 · 画法几何</title>
+<style>
+:root{--ink:#20333e;--muted:#75828a;--accent:#007f79;--line:#dce5e5;--paper:#fff;--bg:#f3f6f5;--new:#dd663c;--given:#354b55;--guide:#a4b3b9;--done:#008b84}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Microsoft YaHei","PingFang SC",sans-serif}button,select,input{font:inherit}button,select{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:8px;padding:8px 13px;cursor:pointer}button:hover{border-color:var(--accent);background:#f0f8f6}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #f4b77b;outline-offset:3px}button:disabled{opacity:.4;cursor:default}.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.primary:hover{background:#006b66;color:#fff}
+.shell{max-width:1520px;margin:auto;padding:26px 36px 20px}header{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:20px}h1{font-size:22px;line-height:1.65;font-weight:500;margin:4px 0;max-width:1250px}.header-actions{flex-shrink:0}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 330px;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}.drawing{min-width:0;border-right:1px solid var(--line)}.toolbar{padding:13px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #edf1f0;gap:8px}.toolbar strong{font-size:14px}.tools{display:flex;gap:5px;align-items:center}.tools button{padding:3px 10px}.tools output{min-width:48px;text-align:center;font-size:12px;color:var(--muted)}.canvas{height:min(61vw,650px);min-height:430px;overflow:hidden;touch-action:none;cursor:grab;background:#fff}.canvas:active{cursor:grabbing}
+svg{width:100%;height:100%;display:block}svg line,svg path,svg circle{vector-effect:non-scaling-stroke}svg .projection{stroke:var(--given);fill:none;stroke-width:2}svg .projection-hidden{stroke:var(--given);fill:none;stroke-width:1.45;stroke-dasharray:7 5}svg .axis{stroke:#667b82;fill:none;stroke-width:1.2}svg .guide{stroke:var(--guide);fill:none;stroke-width:1.15}svg .construction{stroke:var(--done);fill:none;stroke-width:1.25}svg .centerline{stroke:#91a1a8;fill:none;stroke-width:1;stroke-dasharray:10 5 2 5}svg .answer-visible{stroke:var(--new);fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}svg text{font:italic 20px Georgia,"Times New Roman",serif;fill:var(--given);paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round}svg text.note{font:14px "Microsoft YaHei",sans-serif;font-style:normal}.fresh:not(.answer-visible) line,.fresh:not(.answer-visible) path,.fresh:not(.answer-visible) circle{stroke:var(--new)}.fresh:not(.answer-visible) text{fill:var(--new)}
+aside{padding:26px 24px;display:flex;flex-direction:column}.count{color:var(--accent);font-size:12px;letter-spacing:1px;font-weight:700}h2{font-size:23px;margin:10px 0 22px;line-height:1.45}.explain-label{font-size:12px;color:var(--muted);margin:0 0 5px}.explain{font-size:15px;margin:0 0 20px;white-space:pre-line}.model-card{margin-top:auto;padding-top:18px;border-top:1px solid #e6eeee}.model-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.model-heading>div{display:flex;align-items:baseline;gap:9px}.model-heading strong{font-size:14px}.model-heading span{font-size:11px;color:var(--muted)}.model-stage{height:230px;border:1px solid var(--line);border-radius:12px;background:#f4f8f7;overflow:hidden;touch-action:none;cursor:grab;position:relative}.model-stage:active{cursor:grabbing}.model-stage:focus-visible{outline:3px solid #f4b77b;outline-offset:3px}.model-tools{display:flex;align-items:center;justify-content:flex-end;gap:7px;margin-top:8px;color:var(--muted);font-size:11px;flex-wrap:wrap}.model-tools select{font-size:11px;padding:4px 7px;max-width:118px}.model-tools button{padding:4px 9px;font-size:11px}.model-stage[hidden],.model-tools[hidden]{display:none}.selection-highlight{stroke:#b72a80;stroke-width:3;fill:#e346a32b;stroke-linejoin:round;stroke-linecap:round;pointer-events:none}
+.controls{background:#fff;border:1px solid var(--line);border-radius:12px;margin-top:14px;padding:16px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}.controls .range-wrap{flex:1;min-width:160px;display:flex;align-items:center;gap:12px}input[type=range]{width:100%;accent-color:var(--accent)}.progress-text{white-space:nowrap;color:var(--muted);font-size:13px}.steps{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}.step-button{font-size:12px;padding:7px 10px;background:transparent}.step-button[aria-current=step]{background:var(--ink);border-color:var(--ink);color:#fff}.foot{color:var(--muted);font-size:12px}.status{color:#a44426;font-size:13px}.shell:fullscreen{max-width:none;overflow:auto;background:var(--bg)}
+@media(min-width:1450px){.canvas{height:680px}}@media(max-width:1000px){.shell{padding:20px}.workspace{grid-template-columns:minmax(0,1fr) 285px}aside{padding:20px}.toolbar{padding:12px}.canvas{min-height:400px}h1{font-size:20px}}@media(max-width:720px){.shell{padding:16px 12px}header{align-items:flex-start;flex-direction:column;gap:10px}h1{font-size:18px}.workspace{display:flex;flex-direction:column}.drawing{border-right:0;border-bottom:1px solid var(--line)}.canvas{height:76vw;min-height:300px}.toolbar{padding:10px}aside{padding:20px}h2{margin:7px 0 15px;font-size:21px}.model-card{margin-top:10px}.model-stage{height:250px}.controls{padding:12px;gap:8px}.controls button{font-size:13px;padding:8px 10px}.controls .range-wrap{flex-basis:100%}.steps{gap:5px}.step-button{font-size:11px}}@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body><nav aria-label="课程导航" style="display:flex;gap:20px;flex-wrap:wrap;padding:14px 24px;background:#fff;border-bottom:1px solid #dce5e5;font:16px/1.7 Microsoft YaHei,sans-serif"><a href="index.html#assignments">← 课程目录</a><a href="ex-4-1-2.html">上一题</a><a href="ex-4-1-4.html">下一题 →</a></nav>
+<main class="shell" id="app">
+<header><h1 id="title"></h1><div class="header-actions"><button id="fullscreen">全屏</button></div></header>
+<section class="workspace">
+  <div class="drawing">
+    <div class="toolbar"><strong>正等测图作图</strong><div class="tools"><button id="zoomOut" aria-label="缩小">−</button><output id="zoomValue">100%</output><button id="zoomIn" aria-label="放大">＋</button><button id="fit">复位</button></div></div>
+    <div class="canvas" id="canvas"><svg id="diagram" role="img" aria-label="由正面投影和水平投影逐步作台阶正等测图"><title id="svgTitle"></title><g id="scene"></g></svg></div>
+  </div>
+  <aside aria-live="polite">
+    <div class="count" id="count"></div><h2 id="stepTitle"></h2>
+    <p class="explain-label">作图解析</p><p class="explain" id="action"></p>
+    <div class="model-card">
+      <div class="model-heading"><div><strong>3D 模型</strong><span>与两面投影共用几何</span></div><button id="modelToggle" aria-expanded="true">隐藏模型</button></div>
+      <div class="model-stage" id="modelStage" tabindex="0" aria-label="可拖动旋转并选择构件的实体三维模型"><svg id="model3d" viewBox="0 0 300 230" role="img" aria-label="由两级台阶和左右高台组成的对称实体"></svg></div>
+      <div class="model-tools" id="modelTools"><select id="modelSelect" aria-label="选择模型结构"><option value="">选择结构</option><option value="lower">下级台阶</option><option value="upper">上级台阶</option><option value="towers">左右高台</option></select><button id="modelClear">清除高亮</button><button id="modelReset">复位视角</button></div>
+    </div>
+  </aside>
+</section>
+<div class="controls">
+  <button id="prev">← 上一步</button><button id="next" class="primary">下一步 →</button><button id="play">播放</button>
+  <select id="speed" aria-label="自动播放间隔"><option value="6500">每步 6.5 秒</option><option value="10000">每步 10 秒</option><option value="4000">每步 4 秒</option></select>
+  <div class="range-wrap"><input id="progress" type="range" min="0" value="0" aria-label="选择作图步骤"><span id="progressText" class="progress-text"></span></div>
+  <button id="restart">重新开始</button><button id="complete">完整解答</button>
+</div>
+<nav class="steps" id="steps" aria-label="解题步骤"></nav>
+<div class="foot">方向键切换步骤 · 空格播放 / 暂停 · 放大后拖动作图区域</div><p id="status" class="status" role="status"></p>
+</main>
+<script>
+const shapeGeometry=(()=>{
+  const width=190,depth=54,height=56,rearDepth=25,lowerHalf=73,upperHalf=57,towerInner=43,lowerHeight=12,upperHeight=24,upperFront=39;
+  const d=Object.freeze({width,depth,height,rearDepth,lowerHalf,upperHalf,towerInner,lowerHeight,upperHeight,upperFront});
+  const solids=[
+    {key:'lower',name:'下级台阶',x0:-lowerHalf,x1:lowerHalf,y0:0,y1:depth,z0:0,z1:lowerHeight},
+    {key:'upper',name:'上级台阶',x0:-upperHalf,x1:upperHalf,y0:0,y1:upperFront,z0:lowerHeight,z1:upperHeight},
+    {key:'towers',name:'左高台',x0:towerInner,x1:width/2,y0:0,y1:rearDepth,z0:0,z1:height},
+    {key:'towers',name:'右高台',x0:-width/2,x1:-towerInner,y0:0,y1:rearDepth,z0:0,z1:height}
+  ];
+  const feature=(points,kind='solid-edge',closed=false)=>({points,kind,closed});
+  const front=[
+    feature([[width/2,0,0],[-width/2,0,0]]),
+    feature([[width/2,0,0],[width/2,0,height],[towerInner,0,height],[towerInner,0,upperHeight]]),
+    feature([[-width/2,0,0],[-width/2,0,height],[-towerInner,0,height],[-towerInner,0,upperHeight]]),
+    feature([[lowerHalf,0,0],[lowerHalf,0,lowerHeight],[-lowerHalf,0,lowerHeight],[-lowerHalf,0,0]]),
+    feature([[upperHalf,0,lowerHeight],[upperHalf,0,upperHeight],[-upperHalf,0,upperHeight],[-upperHalf,0,lowerHeight]])
+  ];
+  const top=[
+    feature([[width/2,0,0],[-width/2,0,0]]),
+    feature([[width/2,0,0],[width/2,rearDepth,0],[towerInner,rearDepth,0],[towerInner,0,0]],'solid-edge',true),
+    feature([[-width/2,0,0],[-width/2,rearDepth,0],[-towerInner,rearDepth,0],[-towerInner,0,0]],'solid-edge',true),
+    feature([[lowerHalf,rearDepth,0],[lowerHalf,depth,0],[-lowerHalf,depth,0],[-lowerHalf,rearDepth,0]]),
+    feature([[upperHalf,rearDepth,0],[upperHalf,upperFront,0],[-upperHalf,upperFront,0],[-upperHalf,rearDepth,0]])
+  ];
+  return{d,solids,projectionFeatures:{front,top}};
+})();
+
+const solidFaces=[],solidEdges=[],edgeSeen=new Set();
+const pointCode=p=>p.map(v=>v.toFixed(4)).join(','),edgeCode=pts=>pts.map(pointCode).join(';');
+function addFace(pts,key,name,normal){solidFaces.push({pts,key,name,normal})}
+function addEdge(pts,key,name){const a=edgeCode(pts),b=edgeCode([...pts].reverse());if(edgeSeen.has(a)||edgeSeen.has(b))return;edgeSeen.add(a);solidEdges.push({pts,key,name})}
+function buildSolid(){
+  const{solids}=shapeGeometry,xs=[...new Set(solids.flatMap(b=>[b.x0,b.x1]))].sort((a,b)=>a-b),ys=[...new Set(solids.flatMap(b=>[b.y0,b.y1]))].sort((a,b)=>a-b),zs=[...new Set(solids.flatMap(b=>[b.z0,b.z1]))].sort((a,b)=>a-b);
+  const ownerAt=(ix,iy,iz)=>{if(ix<0||iy<0||iz<0||ix>=xs.length-1||iy>=ys.length-1||iz>=zs.length-1)return null;const x=(xs[ix]+xs[ix+1])/2,y=(ys[iy]+ys[iy+1])/2,z=(zs[iz]+zs[iz+1])/2;return solids.find(b=>x>b.x0-1e-7&&x<b.x1+1e-7&&y>b.y0-1e-7&&y<b.y1+1e-7&&z>b.z0-1e-7&&z<b.z1+1e-7)||null};
+  const boundary=[];
+  for(let ix=0;ix<xs.length-1;ix++)for(let iy=0;iy<ys.length-1;iy++)for(let iz=0;iz<zs.length-1;iz++){
+    const owner=ownerAt(ix,iy,iz);if(!owner)continue;const x0=xs[ix],x1=xs[ix+1],y0=ys[iy],y1=ys[iy+1],z0=zs[iz],z1=zs[iz+1];
+    const candidates=[
+      ['x-',ix-1,iy,iz,[[x0,y0,z0],[x0,y1,z0],[x0,y1,z1],[x0,y0,z1]]],['x+',ix+1,iy,iz,[[x1,y0,z0],[x1,y0,z1],[x1,y1,z1],[x1,y1,z0]]],
+      ['y-',ix,iy-1,iz,[[x0,y0,z0],[x0,y0,z1],[x1,y0,z1],[x1,y0,z0]]],['y+',ix,iy+1,iz,[[x0,y1,z0],[x1,y1,z0],[x1,y1,z1],[x0,y1,z1]]],
+      ['z-',ix,iy,iz-1,[[x0,y0,z0],[x1,y0,z0],[x1,y1,z0],[x0,y1,z0]]],['z+',ix,iy,iz+1,[[x0,y0,z1],[x0,y1,z1],[x1,y1,z1],[x1,y0,z1]]]
+    ];
+    for(const[normal,nx,ny,nz,pts]of candidates)if(!ownerAt(nx,ny,nz)){addFace(pts,owner.key,owner.name+'表面',normal);boundary.push({pts,normal,key:owner.key})}
+  }
+  const map=new Map();
+  for(const f of boundary)for(let i=0;i<4;i++){
+    const pts=[f.pts[i],f.pts[(i+1)%4]],a=pointCode(pts[0]),b=pointCode(pts[1]),key=a<b?a+'|'+b:b+'|'+a;
+    if(!map.has(key))map.set(key,{pts,normals:new Set(),groups:new Set()});const rec=map.get(key);rec.normals.add(f.normal);rec.groups.add(f.key)
+  }
+  for(const rec of map.values())if(new Set([...rec.normals].map(n=>n[0])).size>=2){const groups=[...rec.groups],key=groups.includes('towers')?'towers':groups.includes('upper')?'upper':'lower';addEdge(rec.pts,key,key==='towers'?'高台棱线':key==='upper'?'上级台阶棱线':'下级台阶棱线')}
+}
+buildSolid();
+
+function makeLesson(){
+  const{d,solids}=shapeGeometry,q=1.08,fO=[190,220],hO=[190,340],iO=[650,330],sp=1.1;
+  const F=(x,z)=>[fO[0]-x*sp,fO[1]-z*sp],P=(x,y)=>[hO[0]-x*sp,hO[1]+y*sp];
+  const I=(x,y,z)=>[iO[0]+q*Math.sqrt(3)/2*(-x+y),iO[1]+q*(.5*x+.5*y-z)];
+  const AX=t=>I(t,0,0),AY=t=>I(0,t,0),AZ=t=>I(0,0,t);
+  const line=(a,b,order=0,extra={})=>({type:'line',a,b,order,...extra}),path=(points,order=0,closed=false,extra={})=>({type:'path',points,order,closed,...extra}),label=(xy,text,dx=0,dy=0,order=0,note=false)=>({type:'text',xy,text,dx,dy,order,note});
+  const isoLine=(a,b,order=0,extra={})=>line(I(...a),I(...b),order,extra),projectFeatures=(features,project)=>features.map((f,k)=>path(f.points.map(project),k,f.closed));
+  const givenFront=projectFeatures(shapeGeometry.projectionFeatures.front,p=>F(p[0],p[2])),givenTop=projectFeatures(shapeGeometry.projectionFeatures.top,p=>P(p[0],p[1]));
+  const brace=(a,b,offset,order,removeAfter)=>{const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L,sign=Math.sign(offset||1),p=(t,n)=>[a[0]+dx*t+nx*n,a[1]+dy*t+ny*n],p0=p(0,offset),p1=p(.22,offset),p2=p(.43,offset),pm=p(.5,offset+sign*5),p3=p(.57,offset),p4=p(.78,offset),p5=p(1,offset);return{type:'path',d:'M'+p0[0]+','+p0[1]+' C'+p1[0]+','+p1[1]+' '+p2[0]+','+p2[1]+' '+pm[0]+','+pm[1]+' C'+p3[0]+','+p3[1]+' '+p4[0]+','+p4[1]+' '+p5[0]+','+p5[1],order,temporary:true,removeAfter}};
+  const sourceEdge=(a,b,view='auto')=>{if(view==='top')return[P(a[0],a[1]),P(b[0],b[1])];if(view==='front')return[F(a[0],a[2]),F(b[0],b[2])];const dy=Math.abs(b[1]-a[1]);return dy>0?[P(a[0],a[1]),P(b[0],b[1])]:[F(a[0],a[2]),F(b[0],b[2])]};
+  const measuredLine=(a,b,seq,view='auto')=>{const order=seq*4,removeAfter=order+3,[sa,sb]=sourceEdge(a,b,view),ia=I(...a),ib=I(...b);return[line(sa,sb,order,{temporary:true,removeAfter}),brace(sa,sb,7,order,removeAfter),line(ia,ib,order+1,{temporary:true,removeAfter}),brace(ia,ib,-8,order+1,removeAfter),isoLine(a,b,order+3)]};
+  const horizontalPrism=(b,start=0)=>{
+    const out=[],base=[0,b.y0,b.z0],baseL=[b.x0,b.y0,b.z0],baseR=[b.x1,b.y0,b.z0],rearL=[b.x0,b.y0,b.z0],rearR=[b.x1,b.y0,b.z0],frontL=[b.x0,b.y1,b.z0],frontR=[b.x1,b.y1,b.z0],topRearL=[b.x0,b.y0,b.z1],topRearR=[b.x1,b.y0,b.z1],topFrontL=[b.x0,b.y1,b.z1],topFrontR=[b.x1,b.y1,b.z1];
+    let seq=start;const measure=(a,c,view)=>out.push(...measuredLine(a,c,seq++,view)),connect=(a,c)=>out.push(isoLine(a,c,seq++*4+3));
+    measure(base,baseL,'top');measure(base,baseR,'top');
+    measure(rearL,frontL,'top');measure(rearR,frontR,'top');connect(frontL,frontR);
+    measure(rearL,topRearL,'front');measure(rearR,topRearR,'front');measure(frontL,topFrontL,'front');measure(frontR,topFrontR,'front');
+    connect(topRearL,topRearR);connect(topRearL,topFrontL);connect(topRearR,topFrontR);connect(topFrontL,topFrontR);
+    return out
+  };
+  const towerPrism=(b,start=0)=>{
+    const out=[],innerX=Math.abs(b.x0)<Math.abs(b.x1)?b.x0:b.x1,outerX=innerX===b.x0?b.x1:b.x0,
+      axisBase=[0,b.y0,b.z0],rearInner=[innerX,b.y0,b.z0],rearOuter=[outerX,b.y0,b.z0],rearInnerTop=[innerX,b.y0,b.z1],rearOuterTop=[outerX,b.y0,b.z1],
+      frontInner=[innerX,b.y1,b.z0],frontOuter=[outerX,b.y1,b.z0],frontInnerTop=[innerX,b.y1,b.z1],frontOuterTop=[outerX,b.y1,b.z1];
+    let seq=start;const measure=(a,c,view)=>out.push(...measuredLine(a,c,seq++,view)),connect=(a,c)=>out.push(isoLine(a,c,seq++*4+3));
+    measure(axisBase,rearInner,'front');
+    measure(rearInner,rearOuter,'front');measure(rearInner,rearInnerTop,'front');connect(rearOuter,rearOuterTop);connect(rearInnerTop,rearOuterTop);
+    measure(rearInner,frontInner,'top');measure(rearOuter,frontOuter,'top');measure(rearOuterTop,frontOuterTop,'top');measure(rearInnerTop,frontInnerTop,'top');
+    connect(frontInner,frontOuter);connect(frontOuter,frontOuterTop);connect(frontOuterTop,frontInnerTop);connect(frontInnerTop,frontInner);
+    return{elements:out,next:seq}
+  };
+  const lower=solids[0],upper=solids[1],left=solids[2],right=solids[3],lowerConstruction=horizontalPrism(lower),upperConstruction=horizontalPrism(upper),leftTower=towerPrism(left,0),rightTower=towerPrism(right,leftTower.next),towersConstruction=[...leftTower.elements,...rightTower.elements];
+  return{title:'4.1-3',problem:'求作台阶的正等测图。',size:[900,650],iso:I,project3:{front:p=>F(p[0],p[2]),top:p=>P(p[0],p[1])},
+    layers:[
+      {id:'given-front',step:0,role:'projection',elements:givenFront},{id:'given-top',step:0,role:'projection',elements:givenTop},
+      {id:'projection-axes',step:1,role:'axis',elements:[
+        line(F(115,0),F(-115,0)),line(F(0,-10),F(0,d.height+16)),label(F(0,0),'o′',8,18),label(F(115,0),'x′',-12,18),label(F(0,d.height+16),'z′',8,-5),
+        line(P(115,0),P(-115,0)),line(P(0,-10),P(0,d.depth+15)),label(P(0,0),'o',8,-8),label(P(115,0),'x',-12,-8),label(P(0,d.depth+15),'y',8,20)
+      ]},
+      {id:'iso-horizontal',step:2,role:'guide',endStep:2,elements:[line([490,iO[1]],[850,iO[1]])]},
+      {id:'iso-axes',step:2,role:'axis',elements:[line(AX(-125),AX(140),2),line(iO,AY(135),2),line([iO[0],iO[1]+38],AZ(125),1),label(AX(140),'X₁',-24,18,2),label(AY(135),'Y₁',8,18,2),label(AZ(125),'Z₁',8,-8,1)]},
+      {id:'iso-origin',step:2,role:'axis',endStep:5,elements:[label(iO,'O₁',-31,21,1)]},
+      {id:'axis-angles',step:2,role:'construction',endStep:2,elements:[
+        {type:'path',d:'M'+(iO[0]-48)+','+iO[1]+' A48,48 0 0 0 '+(iO[0]-41.57)+','+(iO[1]+24),order:3},{type:'path',d:'M'+(iO[0]+48)+','+iO[1]+' A48,48 0 0 1 '+(iO[0]+41.57)+','+(iO[1]+24),order:3},label([iO[0]-63,iO[1]+38],'30°',0,0,3,true),label([iO[0]+47,iO[1]+38],'30°',0,0,3,true)
+      ]},
+      {id:'lower-construction',step:3,role:'construction',endStep:5,elements:lowerConstruction},{id:'upper-construction',step:4,role:'construction',endStep:5,elements:upperConstruction},{id:'towers-construction',step:5,role:'construction',endStep:5,elements:towersConstruction},{id:'final-visible',step:6,role:'answer-visible',elements:[]}
+    ],
+    steps:[
+      {title:'读题：分析台阶结构',short:'读题',action:'分析组合体的正面投影和水平投影。确定形体的总长、总深、总高，以及两级台阶和左右高台的空间位置。'},
+      {title:'建立投影坐标基准',short:'投影坐标',action:'1. 在 H、V 面投影上确定直角坐标轴；\n2. 以形体底面为 z=0；\n3. 取形体底面后侧棱线的中点为轴测原点 O₁。'},
+      {title:'建立正等测轴',short:'轴测轴',action:'1. 过原点 O₁ 画水平线和竖向轴 O₁Z₁；\n2. 画出与水平线成 30° 的 O₁X₁、O₁Y₁ 轴。'},
+      {title:'作出下级台阶',short:'下级台阶',action:'1. 从水平投影量取下级台阶的长度和深度；\n2. 以 O₁ 为中点，沿 X₁ 正、反方向分别量取半长；由两个端点分别作平行于 Y₁ 轴的深度棱，直接连接两棱前端形成前棱，确定下级台阶底面；\n3. 从正面投影量取下级台阶高度，作竖向棱线并连接上端点，完成下级台阶。'},
+      {title:'作出上级台阶',short:'上级台阶',action:'1. 从水平投影量取上级台阶的长度和深度；\n2. 在下级台阶顶面上，以 O₁Z₁ 轴与该顶面的交点为中点，沿 X₁ 正、反方向分别量取半长；由两端分别作平行于 Y₁ 轴的深度棱，直接连接两棱前端形成前棱；\n3. 从正面投影量取两级台阶的高度差，作竖向棱线并连接上端点，完成上级台阶。'},
+      {title:'逐一作出两侧高台',short:'两侧高台',action:'1. 先作一侧高台。从正面投影量取高台靠近 Z₁ 轴的棱边到 O₁Z₁ 轴的距离，在轴测图中确定该棱边的位置；\n2. 从正面投影依次量取高台的长度和高度，作出高台后表面；\n3. 从水平投影量取高台深度，沿 Y₁ 方向作深度棱线，连接对应端点形成前表面；\n4. 按相同步骤完成另一侧高台。'},
+      {title:'加粗正等测图结果线',short:'加粗结果',action:'判断各实体棱的可见性，将所有可见结果线同时加粗。'}
+    ]};
+}
+const lesson=makeLesson(),$=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
+let current=0,timer=null,zoom=1,offset={x:0,y:0},drag=null,cleanupTimer=null,temporaryTimers=[],drawDuration=0;const last=lesson.steps.length-1;
+const params=new URLSearchParams(location.search),requestedStep=Number(params.get('step'));if(Number.isInteger(requestedStep))current=Math.max(0,Math.min(last,requestedStep));
+function node(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n}
+function element(e){let n;if(e.type==='line')n=node('line',{x1:e.a[0],y1:e.a[1],x2:e.b[0],y2:e.b[1]});else if(e.type==='path'){const d=e.d||e.points.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join(' ')+(e.closed?' Z':'');n=node('path',{d})}else if(e.type==='text')n=node('text',{x:e.xy[0]+(e.dx||0),y:e.xy[1]+(e.dy||0),class:e.note?'note':''},e.text);else throw Error('不支持的图形类型');if(e.order!==undefined)n.dataset.order=e.order;if(e.temporary)n.dataset.temporary='true';if(e.removeAfter!==undefined)n.dataset.removeAfter=e.removeAfter;return n}
+function view(){const[w,h]=lesson.size;$('diagram').setAttribute('viewBox',`${(w-w/zoom)/2-offset.x} ${(h-h/zoom)/2-offset.y} ${w/zoom} ${h/zoom}`);$('zoomValue').textContent=Math.round(zoom*100)+'%';$('zoomOut').disabled=zoom<=1;$('zoomIn').disabled=zoom>=2.5}
+function render(animate=true){clearTimeout(cleanupTimer);temporaryTimers.forEach(clearTimeout);temporaryTimers=[];drawDuration=0;const s=lesson.steps[current];$('count').textContent=current===0?'准备 / 读题':`步骤 ${String(current).padStart(2,'0')} / ${String(last).padStart(2,'0')}`;$('stepTitle').textContent=s.title;$('action').textContent=s.action;$('svgTitle').textContent=lesson.title+'：'+s.title;$('scene').replaceChildren();const geo=node('g',{'data-pass':'geometry'}),labels=node('g',{'data-pass':'labels'});$('scene').append(geo,labels);for(const layer of lesson.layers){if(layer.step>current||(layer.endStep!==undefined&&current>layer.endStep))continue;const gg=node('g'),gt=node('g');for(const e of layer.elements){if(e.temporary&&(layer.step!==current||!animate||matchMedia('(prefers-reduced-motion: reduce)').matches))continue;(e.type==='text'?gt:gg).append(element(e))}for(const[g,suffix]of[[gg,'-g'],[gt,'-t']])if(g.children.length){g.setAttribute('class',layer.role+(layer.step===current&&current>0?' fresh':''));g.dataset.layer=layer.id+suffix;(suffix==='-g'?geo:labels).append(g)}}$('progress').value=current;$('progressText').textContent=`${current} / ${last}`;$('prev').disabled=current===0;$('next').disabled=current===last;[...$('steps').children].forEach((b,i)=>i===current?b.setAttribute('aria-current','step'):b.removeAttribute('aria-current'));view();animateStep(animate);retainProcess(animate);drawProjectionHighlight()}
+function animateStep(enabled){if(!enabled||current===0||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const fresh=[...$('scene').querySelectorAll('.fresh')],all=fresh.flatMap(g=>[...g.children]),strokes=all.filter(n=>n.tagName==='line'||n.tagName==='path'),orders=[...new Set(all.map(n=>Number(n.dataset.order??999)).filter(n=>n!==999))].sort((a,b)=>a-b),duration=270,gap=75,defs=node('defs');$('scene').prepend(defs);strokes.forEach((n,i)=>{const delay=Math.max(0,orders.indexOf(Number(n.dataset.order??999)))*(duration+gap),len=n.getTotalLength();if(!len)return;const id='draw-'+current+'-'+i,mask=node('mask',{id,maskUnits:'userSpaceOnUse',x:-100,y:-100,width:1100,height:850}),trace=n.cloneNode();trace.removeAttribute('class');trace.style.cssText=`vector-effect:none;fill:none;stroke:#fff;stroke-width:14;stroke-dasharray:${len};stroke-dashoffset:${len}`;mask.append(trace);defs.append(mask);n.setAttribute('mask',`url(#${id})`);trace.animate([{strokeDashoffset:String(len)},{strokeDashoffset:'0'}],{duration,delay,fill:'both',easing:'linear'}).finished.then(()=>n.removeAttribute('mask')).catch(()=>{});drawDuration=Math.max(drawDuration,delay+duration)});all.filter(n=>n.tagName==='text').forEach(n=>{const idx=orders.indexOf(Number(n.dataset.order??999)),delay=idx<0?drawDuration:idx*(duration+gap);n.animate([{opacity:0},{opacity:1}],{duration:140,delay,fill:'backwards'});drawDuration=Math.max(drawDuration,delay+140)});all.filter(n=>n.dataset.temporary==='true').forEach(n=>{const idx=orders.indexOf(Number(n.dataset.removeAfter??n.dataset.order??999)),delay=(idx<0?drawDuration:idx*(duration+gap)+duration)+110;temporaryTimers.push(setTimeout(()=>n.remove(),delay))})}
+function retainProcess(enabled){if(current!==last||!enabled||!drawDuration)return;const geo=$('scene').querySelector('[data-pass="geometry"]');for(const layer of lesson.layers.filter(l=>l.endStep===last-1)){const g=node('g',{class:layer.role+' transient-process'});for(const e of layer.elements)if(!e.temporary&&e.type!=='text')g.append(element(e));if(g.children.length)geo.prepend(g)}cleanupTimer=setTimeout(()=>document.querySelectorAll('.transient-process').forEach(n=>n.remove()),drawDuration+160)}
+function stop(){clearTimeout(timer);timer=null;$('play').textContent='播放'}function go(i,animate=true){stop();current=Math.max(0,Math.min(last,i));render(animate)}function play(){if(timer){stop();return}if(current===last){current=0;render(false)}$('play').textContent='暂停';const advance=()=>{timer=setTimeout(()=>{current++;render(true);if(current>=last)timer=setTimeout(stop,Math.max(500,drawDuration+200));else advance()},Math.max(Number($('speed').value),drawDuration+1000))};advance()}
+document.title=lesson.title+' 正等测图';$('title').textContent='【'+lesson.title+'】'+lesson.problem;$('progress').max=last;lesson.steps.forEach((s,i)=>{const b=document.createElement('button');b.className='step-button';b.textContent=`${i===0?'准备':String(i).padStart(2,'0')} ${s.short}`;b.onclick=()=>go(i);$('steps').append(b)});$('prev').onclick=()=>go(current-1);$('next').onclick=()=>go(current+1);$('complete').onclick=()=>go(last,false);$('restart').onclick=()=>{zoom=1;offset={x:0,y:0};go(0,false)};$('play').onclick=play;$('speed').onchange=()=>{if(timer){stop();play()}};$('progress').oninput=e=>go(+e.target.value);$('zoomIn').onclick=()=>{zoom=Math.min(2.5,zoom+.25);view()};$('zoomOut').onclick=()=>{zoom=Math.max(1,zoom-.25);if(zoom===1)offset={x:0,y:0};view()};$('fit').onclick=()=>{zoom=1;offset={x:0,y:0};view()};$('canvas').onpointerdown=e=>{if(zoom===1)return;drag={x:e.clientX,y:e.clientY,ox:offset.x,oy:offset.y};$('canvas').setPointerCapture(e.pointerId)};$('canvas').onpointermove=e=>{if(!drag)return;const r=$('diagram').getBoundingClientRect(),scale=Math.min(r.width/(lesson.size[0]/zoom),r.height/(lesson.size[1]/zoom));offset={x:drag.ox+(e.clientX-drag.x)/scale,y:drag.oy+(e.clientY-drag.y)/scale};view()};$('canvas').onpointerup=$('canvas').onpointercancel=()=>drag=null;$('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('app').requestFullscreen()}catch{$('status').textContent='当前浏览器不支持网页全屏，可以使用浏览器的全屏功能。'}};document.addEventListener('fullscreenchange',()=>{$('fullscreen').textContent=document.fullscreenElement?'退出全屏':'全屏'});document.addEventListener('keydown',e=>{if(['INPUT','SELECT','BUTTON'].includes(document.activeElement.tagName))return;if(e.key==='ArrowRight'){e.preventDefault();go(current+1)}if(e.key==='ArrowLeft'){e.preventDefault();go(current-1)}if(e.code==='Space'){e.preventDefault();play()}});
+
+const modelSvg=$('model3d'),modelStage=$('modelStage'),modelCenter=[0,shapeGeometry.d.depth*.5,shapeGeometry.d.height*.5],defaultYaw=-3*Math.PI/4,defaultPitch=Math.atan(1/Math.sqrt(2));let modelYaw=defaultYaw,modelPitch=defaultPitch,modelScale=1,modelDrag=null,modelMoved=false,selected=null;
+// Match lesson.iso: screen right = (-x+y)/sqrt(2), screen up = (-x-y+2z)/sqrt(6).
+// Depth increases toward the viewer, as in fixedProject: (x+y+z)/sqrt(3).
+function rotate3(p){const x=p[0]-modelCenter[0],y=p[1]-modelCenter[1],z=p[2]-modelCenter[2],cy=Math.cos(modelYaw),sy=Math.sin(modelYaw),cp=Math.cos(modelPitch),sp=Math.sin(modelPitch),rx=x*cy-y*sy,ry=x*sy+y*cy;return[rx,z*cp+ry*sp,-ry*cp+z*sp]}
+function project3(p){const q=rotate3(p),k=.92*modelScale;return[150+q[0]*k,118-q[1]*k,q[2]]}
+function polygonContains(p,poly){let inside=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j],vx=b[0]-a[0],vy=b[1]-a[1],wx=p[0]-a[0],wy=p[1]-a[1],cross=vx*wy-vy*wx,dot=wx*vx+wy*vy,len2=vx*vx+vy*vy;if(Math.abs(cross)<.18&&dot>=-.18&&dot<=len2+.18)return true;if((a[1]>p[1])!==(b[1]>p[1])&&p[0]<(b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1])+a[0])inside=!inside}return inside}
+function screenPlane(q){const a=q[0];for(let i=1;i<q.length-1;i++){const b=q[i],c=q[i+1],ux=b[0]-a[0],uy=b[1]-a[1],uz=b[2]-a[2],vx=c[0]-a[0],vy=c[1]-a[1],vz=c[2]-a[2],nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx;if(Math.abs(nz)>1e-5)return{a,nx,ny,nz}}return null}
+function faceDepth(face,x,y){const p=face.plane;if(!p||!polygonContains([x,y],face.q))return null;return p.a[2]-(p.nx*(x-p.a[0])+p.ny*(y-p.a[1]))/p.nz}
+function visibleFragments(q,faces,tolerance=.8){const visible=p=>!faces.some(f=>{const z=faceDepth(f,p[0],p[1]);return z!==null&&z>p[2]+tolerance}),runs=[];let run=[];const flush=()=>{if(run.length>1)runs.push(run);run=[]};for(let i=0;i<q.length-1;i++){const a=q[i],b=q[i+1],n=Math.max(2,Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/3));for(let k=i?1:0;k<=n;k++){const t=k/n,p=[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];if(visible(p))run.push(p);else flush()}}flush();return runs}
+function fixedProject(p){return[...lesson.iso(...p),(p[0]+p[1]+p[2])/Math.sqrt(3)]}
+function buildVisibleAnswer(){const faces=solidFaces.map(f=>{const q=f.pts.map(fixedProject);return{q,plane:screenPlane(q)}}),elements=[],seen=new Set();for(const edge of solidEdges){for(const run of visibleFragments(edge.pts.map(fixedProject),faces)){const pts=run.map(p=>p.slice(0,2)),key=edgeCode(pts),rev=edgeCode([...pts].reverse());if(seen.has(key)||seen.has(rev))continue;seen.add(key);elements.push({type:'path',points:pts,order:0})}}lesson.layers.find(l=>l.id==='final-visible').elements=elements}
+function drawModel(){modelSvg.replaceChildren();const faces=solidFaces.map((f,index)=>{const q=f.pts.map(project3);return{f,index,q,plane:screenPlane(q),depth:q.reduce((s,p)=>s+p[2],0)/q.length}});[...faces].sort((a,b)=>a.depth-b.depth).forEach(({f,index,q})=>modelSvg.append(node('polygon',{points:q.map(p=>p[0]+','+p[1]).join(' '),fill:selected?.kind==='face'&&selected.index===index?'#d65aa0':'#a8d4d0',stroke:'none','data-kind':'face','data-index':index,'aria-label':f.name})));solidEdges.forEach((e,index)=>{for(const q of visibleFragments(e.pts.map(project3),faces)){const pts=q.map(p=>p[0]+','+p[1]).join(' '),on=selected&&(selected.kind==='edge'&&selected.index===index||selected.kind==='group'&&selected.key===e.key);modelSvg.append(node('polyline',{points:pts,fill:'none',stroke:'transparent','stroke-width':12,'pointer-events':'stroke','data-kind':'edge','data-index':index,'aria-label':e.name}));modelSvg.append(node('polyline',{points:pts,fill:'none',stroke:on?'#b72a80':'#31535d','stroke-width':on?3.4:1.7,'stroke-linejoin':'round','stroke-linecap':'round','pointer-events':'none'}))}})}
+function drawProjectionHighlight(){$('selectionOverlay')?.remove();if(!selected)return;const g=node('g',{id:'selectionOverlay'}),projectors=Object.values(lesson.project3);let objects=[];if(selected.kind==='edge')objects=[solidEdges[selected.index]];else if(selected.kind==='face')objects=[{pts:solidFaces[selected.index].pts,closed:true}];else objects=solidEdges.filter(e=>e.key===selected.key);for(const obj of objects)for(const project of projectors){const pts=obj.pts.map(project),d=pts.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join(' ')+(obj.closed?' Z':'');g.append(node('path',{d,class:'selection-highlight'}))}$('scene').append(g)}
+function selectModel(value){selected=value;drawModel();drawProjectionHighlight();$('modelSelect').value=value?.kind==='group'?value.key:''}
+modelStage.onpointerdown=e=>{modelDrag={x:e.clientX,y:e.clientY,yaw:modelYaw,pitch:modelPitch,kind:e.target.dataset.kind,index:Number(e.target.dataset.index)};modelMoved=false;modelStage.setPointerCapture(e.pointerId);e.preventDefault()};modelStage.onpointermove=e=>{if(!modelDrag)return;if(Math.hypot(e.clientX-modelDrag.x,e.clientY-modelDrag.y)>4)modelMoved=true;if(modelMoved){modelYaw=modelDrag.yaw+(e.clientX-modelDrag.x)*.012;modelPitch=modelDrag.pitch+(e.clientY-modelDrag.y)*.012;drawModel()}};modelStage.onpointerup=()=>{if(modelDrag&&!modelMoved&&modelDrag.kind)selectModel({kind:modelDrag.kind,index:modelDrag.index});modelDrag=null};modelStage.onpointercancel=()=>modelDrag=null;modelStage.addEventListener('wheel',e=>{e.preventDefault();modelScale=Math.max(.58,Math.min(1.55,modelScale-e.deltaY*.001));drawModel()},{passive:false});modelStage.onkeydown=e=>{const d=.14;if(e.key==='ArrowLeft')modelYaw-=d;else if(e.key==='ArrowRight')modelYaw+=d;else if(e.key==='ArrowUp')modelPitch-=d;else if(e.key==='ArrowDown')modelPitch+=d;else return;e.preventDefault();drawModel()};$('modelToggle').onclick=()=>{const show=modelStage.hidden;modelStage.hidden=!show;$('modelTools').hidden=!show;$('modelToggle').textContent=show?'隐藏模型':'显示模型';$('modelToggle').setAttribute('aria-expanded',String(show));if(show){drawModel();modelStage.focus()}else selectModel(null)};$('modelSelect').onchange=e=>selectModel(e.target.value?{kind:'group',key:e.target.value}:null);$('modelClear').onclick=()=>selectModel(null);$('modelReset').onclick=()=>{modelYaw=defaultYaw;modelPitch=defaultPitch;modelScale=1;drawModel();modelStage.focus()};
+buildVisibleAnswer();drawModel();render(false);
+</script>
+</body>
+</html>

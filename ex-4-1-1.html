@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>作业 4.1-1 · 画法几何</title>
+<style>
+:root{--ink:#20333e;--muted:#75828a;--accent:#007f79;--line:#dce5e5;--paper:#fff;--bg:#f3f6f5;--new:#dd663c;--given:#354b55;--guide:#a4b3b9;--done:#008b84}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Microsoft YaHei","PingFang SC",sans-serif}
+button,select,input{font:inherit}
+button,select{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:8px;padding:8px 13px;cursor:pointer}
+button:hover{border-color:var(--accent);background:#f0f8f6}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #f4b77b;outline-offset:3px}
+button:disabled{opacity:.4;cursor:default}
+.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.primary:hover{background:#006b66;color:#fff}
+.shell{max-width:1520px;margin:auto;padding:26px 36px 20px}
+header{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:20px}
+h1{font-size:22px;line-height:1.65;font-weight:500;margin:4px 0;max-width:1250px}
+.header-actions{flex-shrink:0}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 330px;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.drawing{min-width:0;border-right:1px solid var(--line)}
+.toolbar{padding:13px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #edf1f0;gap:8px}
+.toolbar strong{font-size:14px}
+.tools{display:flex;gap:5px;align-items:center}
+.tools button{padding:3px 10px}
+.tools output{min-width:48px;text-align:center;font-size:12px;color:var(--muted)}
+.canvas{height:min(61vw,650px);min-height:430px;overflow:hidden;touch-action:none;cursor:grab;background:#fff}
+.canvas:active{cursor:grabbing}
+svg{width:100%;height:100%;display:block}
+svg line,svg path,svg circle{vector-effect:non-scaling-stroke}
+svg .given{stroke:var(--given);fill:none;stroke-width:1.2}
+svg .projection{stroke:var(--given);fill:none;stroke-width:2}
+svg .axis{stroke:#667b82;fill:none;stroke-width:1.2}
+svg .guide{stroke:var(--guide);fill:none;stroke-width:1.15}
+svg .construction{stroke:var(--done);fill:none;stroke-width:1.25}
+svg .answer-visible{stroke:var(--new);fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+svg .answer-hidden{stroke:var(--new);fill:none;stroke-width:3;stroke-dasharray:11 8;stroke-linecap:butt}
+svg text{font:italic 21px Georgia,"Times New Roman",serif;fill:var(--given);paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round}
+svg text.note{font:15px "Microsoft YaHei",sans-serif;font-style:normal}
+svg .point{fill:#fff;stroke-width:1.25}
+svg .fresh:not(.answer-visible):not(.answer-hidden) line,svg .fresh:not(.answer-visible):not(.answer-hidden) path,svg .fresh:not(.answer-visible):not(.answer-hidden) circle{stroke:var(--new)}
+svg .fresh:not(.answer-visible):not(.answer-hidden) text{fill:var(--new)}
+aside{padding:26px 24px;display:flex;flex-direction:column}
+.count{color:var(--accent);font-size:12px;letter-spacing:1px;font-weight:700}
+h2{font-size:23px;margin:10px 0 22px;line-height:1.45}
+.explain-label{font-size:12px;color:var(--muted);margin:0 0 5px}
+.explain{font-size:15px;margin:0 0 20px;white-space:pre-line}
+.model-card{margin-top:auto;padding-top:18px;border-top:1px solid #e6eeee}
+.model-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.model-heading strong{font-size:14px}.model-heading span{font-size:11px;color:var(--muted)}
+.model-stage{height:230px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(145deg,#fbfdfc,#f0f6f5);overflow:hidden;touch-action:none;cursor:grab;position:relative}
+.model-stage:active{cursor:grabbing}.model-stage:focus-visible{outline:3px solid #f4b77b;outline-offset:3px}
+#model3d{width:100%;height:100%;display:block}
+#model3d .model-edge{fill:none;stroke:#31535d;stroke-width:1.7}
+#model3d .model-point{fill:#fff;stroke:#dd663c;stroke-width:1.5}
+#model3d .model-label{font:italic 15px Georgia,"Times New Roman",serif;fill:#20333e;stroke:#fff;stroke-width:4px}
+.model-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;color:var(--muted);font-size:11px}
+.model-tools button{padding:4px 9px;font-size:11px}
+.controls{background:#fff;border:1px solid var(--line);border-radius:12px;margin-top:14px;padding:16px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.controls .range-wrap{flex:1;min-width:160px;display:flex;align-items:center;gap:12px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.progress-text{white-space:nowrap;color:var(--muted);font-size:13px}
+.steps{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}
+.step-button{font-size:12px;padding:7px 10px;background:transparent}
+.step-button[aria-current=step]{background:var(--ink);border-color:var(--ink);color:#fff}
+.foot{color:var(--muted);font-size:12px}
+.status{color:#a44426;font-size:13px}
+.shell:fullscreen{max-width:none;overflow:auto;background:var(--bg)}
+@media(min-width:1450px){.canvas{height:680px}}
+@media(max-width:1000px){.shell{padding:20px}.workspace{grid-template-columns:minmax(0,1fr) 285px}aside{padding:20px}.toolbar{padding:12px}.canvas{min-height:400px}h1{font-size:20px}}
+@media(max-width:720px){.shell{padding:16px 12px}header{align-items:flex-start;flex-direction:column;gap:10px}h1{font-size:18px}.workspace{display:flex;flex-direction:column}.drawing{border-right:0;border-bottom:1px solid var(--line)}.canvas{height:76vw;min-height:300px}.toolbar{padding:10px}.toolbar strong{font-size:12px}aside{padding:20px}h2{margin:7px 0 15px;font-size:21px}.model-card{margin-top:10px}.model-stage{height:250px}.controls{padding:12px;gap:8px}.controls button{font-size:13px;padding:8px 10px}.controls .range-wrap{flex-basis:100%}.controls select{font-size:13px}.steps{gap:5px}.step-button{font-size:11px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body><nav aria-label="课程导航" style="display:flex;gap:20px;flex-wrap:wrap;padding:14px 24px;background:#fff;border-bottom:1px solid #dce5e5;font:16px/1.7 Microsoft YaHei,sans-serif"><a href="index.html#assignments">← 课程目录</a><a href="ex-3-7-20.html">上一题</a><a href="ex-4-1-2.html">下一题 →</a></nav>
+<main class="shell" id="app">
+<header>
+  <div><h1 id="title"></h1></div>
+  <div class="header-actions"><button id="fullscreen">全屏</button></div>
+</header>
+<section class="workspace">
+  <div class="drawing">
+    <div class="toolbar"><strong>正等测图作图</strong><div class="tools"><button id="zoomOut" aria-label="缩小">−</button><output id="zoomValue">100%</output><button id="zoomIn" aria-label="放大">＋</button><button id="fit">复位</button></div></div>
+    <div class="canvas" id="canvas"><svg id="diagram" role="img" aria-label="由两面投影逐步作三棱锥正等测图"><title id="svgTitle"></title><g id="scene"></g></svg></div>
+  </div>
+  <aside aria-live="polite">
+    <div class="count" id="count"></div><h2 id="stepTitle"></h2>
+    <p class="explain-label">作图解析</p><p class="explain" id="action"></p>
+    <div class="model-card">
+      <div class="model-heading"><strong>3D 模型</strong><span>任意方向观察</span></div>
+      <div class="model-stage" id="modelStage" tabindex="0" aria-live="off" aria-label="可拖动旋转的三棱锥三维模型"><svg id="model3d" viewBox="0 0 300 230" role="img" aria-label="三棱锥三维模型"></svg></div>
+      <div class="model-tools"><span>拖动旋转 · 滚轮缩放</span><button id="modelReset">复位视角</button></div>
+    </div>
+  </aside>
+</section>
+<div class="controls">
+  <button id="prev">← 上一步</button><button id="next" class="primary">下一步 →</button><button id="play">播放</button>
+  <select id="speed" aria-label="自动播放间隔"><option value="6000">每步 6 秒</option><option value="10000">每步 10 秒</option><option value="3500">每步 3.5 秒</option></select>
+  <div class="range-wrap"><input id="progress" type="range" min="0" value="0" aria-label="选择作图步骤"><span id="progressText" class="progress-text"></span></div>
+  <button id="restart">重新开始</button><button id="complete">完整解答</button>
+</div>
+<nav class="steps" id="steps" aria-label="解题步骤"></nav>
+<div class="foot">方向键切换步骤 · 空格播放 / 暂停 · 放大后拖动作图区域</div>
+<p id="status" class="status" role="status"></p>
+</main>
+<script>
+const lesson={
+  title:'4.1-1',
+  problem:'求作三棱锥的正等测图。',
+  size:[900,650],
+  points:{
+    vO:[70,250],vC:[93,250],vB:[218,250],vS:[120,102],vZend:[70,70],vXend:[270,250],
+    hO:[70,380],hC:[93,482],hB:[218,438],hS:[120,425],hXend:[270,380],hYend:[70,530],
+    isoO:[470,500],isoX:[770,327],isoY:[650,604],isoZ:[470,242],isoHLeft:[405,500],isoHRight:[795,500],
+    bx:[647.1,397.8],by:[539.1,539.9],B:[716.1,437.7],
+    cx:[497.6,484.1],cy:[591.8,570.3],C:[619.4,554.4],
+    sx:[530.3,465.2],sy:[524.0,531.2],s1:[584.2,496.4],S:[584.2,292.0],hFoot:[120,250]
+  },
+  layers:[
+    {id:'given-front',step:0,role:'projection',elements:[
+      {type:'line',from:'vO',to:'vS',order:0},{type:'line',from:'vS',to:'vB',order:1},{type:'line',from:'vB',to:'vO',order:2},{type:'line',from:'vS',to:'vC',order:3}
+    ]},
+    {id:'given-plan',step:0,role:'projection',elements:[
+      {type:'line',from:'hO',to:'hB',order:0},{type:'line',from:'hB',to:'hC',order:1},{type:'line',from:'hC',to:'hO',order:2},{type:'line',from:'hS',to:'hO',order:3},{type:'line',from:'hS',to:'hB',order:4},{type:'line',from:'hS',to:'hC',order:5}
+    ]},
+    {id:'source-axes',step:1,role:'axis',elements:[
+      {type:'line',from:'vO',to:'vZend',order:0},{type:'line',from:'vO',to:'vXend',order:0},{type:'line',from:'hO',to:'hXend',order:0},{type:'line',from:'hO',to:'hYend',order:0},
+      {type:'text',at:'vO',text:'o′',dx:-24,dy:7,order:0},{type:'text',at:'vZend',text:'z′',dx:-21,dy:8,order:0},{type:'text',at:'vXend',text:'x′',dx:8,dy:7,order:0},
+      {type:'text',at:'hO',text:'o',dx:-20,dy:7,order:0},{type:'text',at:'hXend',text:'x',dx:8,dy:7,order:0},{type:'text',at:'hYend',text:'y',dx:-6,dy:27,order:0}
+    ]},
+    {id:'iso-horizontal',step:2,role:'guide',endStep:6,elements:[
+      {type:'line',from:'isoHLeft',to:'isoHRight',order:0}
+    ]},
+    {id:'iso-z-axis',step:2,role:'axis',elements:[
+      {type:'line',from:'isoO',to:'isoZ',order:1},{type:'text',at:'isoO',text:'O₁',dx:-31,dy:18,order:1},{type:'text',at:'isoZ',text:'Z₁',dx:-19,dy:-8,order:1}
+    ]},
+    {id:'iso-xy-axes',step:2,role:'axis',elements:[
+      {type:'line',from:'isoO',to:'isoX',order:2},{type:'line',from:'isoO',to:'isoY',order:2},
+      {type:'text',at:'isoX',text:'X₁',dx:8,dy:8,order:2},{type:'text',at:'isoY',text:'Y₁',dx:8,dy:18,order:2}
+    ]},
+    {id:'axis-angles',step:2,role:'construction',endStep:2,elements:[
+      {type:'path',d:'M515,500 A45,45 0 0 0 508.97,477.5',order:3},
+      {type:'path',d:'M515,500 A45,45 0 0 1 508.97,522.5',order:3},
+      {type:'text',xy:[516,479],text:'30°',note:true,order:3},{type:'text',xy:[516,535],text:'30°',note:true,order:3}
+    ]},
+    {id:'source-base-labels',step:3,role:'projection',elements:[
+      {type:'point',at:'vB',order:0},{type:'point',at:'vC',order:0},{type:'point',at:'hB',order:0},{type:'point',at:'hC',order:0},
+      {type:'text',at:'vB',text:'b′',dx:10,dy:-10,order:0},{type:'text',at:'vC',text:'c′',dx:4,dy:24,order:0},
+      {type:'text',at:'hB',text:'b',dx:10,dy:3,order:0},{type:'text',at:'hC',text:'c',dx:9,dy:22,order:0}
+    ]},
+    {id:'source-apex-labels',step:3,role:'projection',elements:[
+      {type:'point',at:'vS',order:0},{type:'point',at:'hS',order:0},{type:'text',at:'vS',text:'s′',dx:9,dy:-9,order:0},{type:'text',at:'hS',text:'s',dx:9,dy:21,order:0}
+    ]},
+    {id:'base-transfer',step:3,role:'guide',endStep:6,elements:[
+      {type:'line',from:'bx',to:'B',order:1},{type:'line',from:'by',to:'B',order:2},{type:'line',from:'cx',to:'C',order:3},{type:'line',from:'cy',to:'C',order:4}
+    ]},
+    {id:'apex-plan-transfer',step:3,role:'guide',endStep:6,elements:[
+      {type:'line',from:'sx',to:'s1',order:5},{type:'line',from:'sy',to:'s1',order:6}
+    ]},
+    {id:'base-points',step:3,role:'construction',endStep:6,elements:[
+      {type:'point',at:'B',order:7},{type:'point',at:'C',order:7},{type:'text',at:'B',text:'B₁',dx:10,dy:-9,order:7},{type:'text',at:'C',text:'C₁',dx:10,dy:23,order:7}
+    ]},
+    {id:'apex-plan-point',step:3,role:'construction',endStep:6,elements:[
+      {type:'point',at:'s1',order:7},{type:'text',at:'s1',text:'s₁',dx:9,dy:20,order:7}
+    ]},
+    {id:'front-height-measure',step:4,role:'construction',endStep:6,elements:[
+      {type:'line',from:'vS',to:'hFoot',order:0},{type:'text',xy:[130,181],text:'h',order:0}
+    ]},
+    {id:'height',step:4,role:'construction',endStep:6,elements:[
+      {type:'line',from:'s1',to:'S',order:1},{type:'point',at:'S',order:2},{type:'text',at:'S',text:'S₁',dx:10,dy:-8,order:2},{type:'text',xy:[595,401],text:'h',note:false,order:1}
+    ]},
+    {id:'all-edges-thin',step:5,role:'construction',endStep:6,elements:[
+      {type:'line',from:'isoO',to:'B',order:0},{type:'line',from:'B',to:'C',order:1},{type:'line',from:'C',to:'isoO',order:2},
+      {type:'line',from:'S',to:'isoO',order:3},{type:'line',from:'S',to:'B',order:4},{type:'line',from:'S',to:'C',order:5}
+    ]},
+    {id:'visibility-note',step:6,role:'construction',endStep:6,elements:[
+      {type:'text',xy:[573,454],text:'不可见底棱',note:true}
+    ]},
+    {id:'final-visible',step:7,role:'answer-visible',elements:[
+      {type:'line',from:'isoO',to:'C',order:0},{type:'line',from:'C',to:'B',order:1},{type:'line',from:'S',to:'isoO',order:2},{type:'line',from:'S',to:'B',order:3},{type:'line',from:'S',to:'C',order:4}
+    ]},
+    {id:'final-hidden',step:7,role:'answer-hidden',elements:[
+      {type:'line',from:'isoO',to:'B',order:5}
+    ]}
+  ],
+  steps:[
+    {title:'读题：识别三棱锥',short:'读题',action:'观察正面投影和水平投影。水平投影可获知底面各顶点的 x、y 坐标值；正面投影可获知锥顶到底面的距离，即 z 值。'},
+    {title:'建立投影坐标轴',short:'投影坐标轴',action:'取两幅投影中最左侧的同一底面顶点为原点，同时画出正面投影的 o′x′、o′z′ 轴和水平投影的 ox、oy 轴。'},
+    {title:'建立正等测轴',short:'轴测轴',action:'1. 过原点 O₁ 画水平线和竖向轴 O₁Z₁；\n2. 画出与水平线成 30° 的 O₁X₁、O₁Y₁ 轴。'},
+    {title:'确定 B₁、C₁、s₁',short:'确定三点',action:'1. 在投影图中标出顶点 B、C、S 的两面投影 b′、c′、s′ 和 b、c、s；\n2. 在水平投影中分别量取三点的 x、y 坐标值；\n3. 沿 X₁ 和 Y₁ 方向作平行线，依次确定 B₁、C₁、s₁ 的位置。'},
+    {title:'量取高度并确定 S₁',short:'确定锥顶',action:'1. 在正面投影中，由 s′ 作竖直线到 o′x′，该线段即为高度 h；\n2. 轴测图中，过 s₁ 作 O₁Z₁ 的平行线，量取 h，确定锥顶 S₁。'},
+    {title:'统一连接全部棱线',short:'连接棱线',action:'细实线连接四个顶点 O₁、B₁、C₁、S₁，作出三条底棱和三条侧棱。'},
+    {title:'判别棱线可见性',short:'可见性',action:'判别线段可见性：O₁B₁ 不可见，O₁S₁、O₁C₁、C₁B₁ 均可见。'},
+    {title:'加粗三棱锥结果线',short:'加粗结果',action:'加粗结果线，其中 O₁B₁ 用虚线，O₁S₁、O₁C₁、C₁B₁ 用粗实线。'}
+  ]
+};
+
+const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
+let current=0,timer=null,zoom=1,offset={x:0,y:0},drag=null,cleanupTimer=null,drawDuration=0;
+const last=lesson.steps.length-1;
+const requestedStep=Number(new URLSearchParams(location.search).get('step'));
+if(Number.isInteger(requestedStep))current=Math.max(0,Math.min(last,requestedStep));
+function node(tag,attrs={},text){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n}
+function element(e){let n;const p=id=>lesson.points[id];if(e.type==='line'){const a=p(e.from),b=p(e.to);n=node('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1]})}else if(e.type==='path'){n=node('path',{d:e.d})}else if(e.type==='point'){const a=p(e.at);n=node('circle',{cx:a[0],cy:a[1],r:3.8,class:'point'})}else if(e.type==='text'){const a=e.at?p(e.at):e.xy;n=node('text',{x:a[0]+(e.dx||0),y:a[1]+(e.dy||0),class:e.note?'note':''},e.text)}else throw Error('不支持的图形类型：'+e.type);if(e.order!==undefined)n.dataset.order=e.order;return n}
+function view(){const[w,h]=lesson.size;$('diagram').setAttribute('viewBox',`${(w-w/zoom)/2-offset.x} ${(h-h/zoom)/2-offset.y} ${w/zoom} ${h/zoom}`);$('zoomValue').textContent=Math.round(zoom*100)+'%';$('zoomOut').disabled=zoom<=1;$('zoomIn').disabled=zoom>=2.5}
+function appendLayer(container,layer,fresh=false,transient=false){const g=node('g',{class:layer.role+(fresh?' fresh':'')+(transient?' transient-process':''),'data-layer':layer.id});for(const e of layer.elements)g.append(element(e));container.append(g);return g}
+function render(animate=true){
+  clearTimeout(cleanupTimer);cleanupTimer=null;drawDuration=0;
+  const s=lesson.steps[current];$('count').textContent=current===0?'准备 / 读题':`步骤 ${String(current).padStart(2,'0')} / ${String(last).padStart(2,'0')}`;
+  for(const[id,key]of [['stepTitle','title'],['action','action']])$(id).textContent=s[key]||'';
+  $('svgTitle').textContent=lesson.title+'：'+s.title;$('scene').replaceChildren();
+  const geometry=node('g',{'data-pass':'geometry'}),labels=node('g',{'data-pass':'labels'});$('scene').append(geometry,labels);
+  for(const layer of lesson.layers){if(layer.step>current||(layer.endStep!==undefined&&current>layer.endStep))continue;const targetGeo=node('g'),targetText=node('g');for(const e of layer.elements)(e.type==='text'?targetText:targetGeo).append(element(e));for(const[target,suffix]of[[targetGeo,'-g'],[targetText,'-t']]){if(!target.children.length)continue;target.setAttribute('class',layer.role+(layer.step===current&&current>0?' fresh':''));target.dataset.layer=layer.id+suffix;(suffix==='-g'?geometry:labels).append(target)}}
+  $('progress').value=current;$('progressText').textContent=`${current} / ${last}`;$('prev').disabled=current===0;$('next').disabled=current===last;
+  [...$('steps').children].forEach((b,i)=>i===current?b.setAttribute('aria-current','step'):b.removeAttribute('aria-current'));view();
+  animateStep(animate);retainProcessUntilAnswerFinishes(animate);
+}
+function animateStep(enabled){
+  drawDuration=0;if(!enabled||current===0||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const fresh=[...$('scene').querySelectorAll('.fresh')],strokes=fresh.flatMap(g=>[...g.children].filter(n=>n.tagName==='line'||n.tagName==='path'));
+  strokes.sort((a,b)=>Number(a.dataset.order??999)-Number(b.dataset.order??999));
+  const duration=320,gap=80,defs=node('defs');$('scene').prepend(defs);
+  const allFresh=fresh.flatMap(g=>[...g.children]),orders=[...new Set(allFresh.map(n=>Number(n.dataset.order??999)).filter(n=>n!==999))];
+  strokes.forEach((n,i)=>{const delay=orders.indexOf(Number(n.dataset.order??999))*(duration+gap),len=n.getTotalLength();if(!len)return;const id='draw-'+current+'-'+i,mask=node('mask',{id,maskUnits:'userSpaceOnUse',x:-100,y:-100,width:1100,height:850}),path=n.cloneNode();path.removeAttribute('class');path.style.cssText=`vector-effect:none;fill:none;stroke:#fff;stroke-width:14;stroke-dasharray:${len};stroke-dashoffset:${len}`;mask.append(path);defs.append(mask);n.setAttribute('mask',`url(#${id})`);path.animate([{strokeDashoffset:String(len)},{strokeDashoffset:'0'}],{duration,delay,fill:'both',easing:'linear'}).finished.then(()=>n.removeAttribute('mask')).catch(()=>{});drawDuration=Math.max(drawDuration,delay+duration)});
+  allFresh.filter(n=>n.tagName==='text'||n.tagName==='circle').forEach(n=>{const order=Number(n.dataset.order??999),delay=order===999?drawDuration:Math.max(0,orders.indexOf(order))*(duration+gap);n.animate([{opacity:0},{opacity:1}],{duration:120,delay,fill:'backwards'});drawDuration=Math.max(drawDuration,delay+120)});
+}
+function retainProcessUntilAnswerFinishes(enabled){
+  if(current!==7||!enabled||!drawDuration||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const geo=$('scene').querySelector('[data-pass="geometry"]'),lab=$('scene').querySelector('[data-pass="labels"]');
+  for(const layer of lesson.layers.filter(l=>l.endStep===6)){
+    const gg=node('g',{class:layer.role+' transient-process'}),gt=node('g',{class:layer.role+' transient-process'});
+    for(const e of layer.elements)(e.type==='text'?gt:gg).append(element(e));
+    if(gg.children.length)geo.prepend(gg);if(gt.children.length)lab.prepend(gt);
+  }
+  cleanupTimer=setTimeout(()=>{document.querySelectorAll('.transient-process').forEach(n=>n.remove());cleanupTimer=null},drawDuration+140);
+}
+function stop(){clearTimeout(timer);timer=null;$('play').textContent='播放';$('play').setAttribute('aria-pressed','false')}
+function go(i,animate=true){stop();current=Math.max(0,Math.min(last,i));render(animate)}
+function play(){if(timer){stop();return}if(current===last){current=0;render(false)}$('play').textContent='暂停';$('play').setAttribute('aria-pressed','true');const advance=()=>{timer=setTimeout(()=>{current++;render(true);if(current>=last){timer=setTimeout(stop,Math.max(400,drawDuration+180))}else advance()},Math.max(Number($('speed').value),drawDuration+900))};advance()}
+
+document.title=lesson.title+' 正等测图';$('title').textContent='【'+lesson.title+'】'+lesson.problem;$('progress').max=last;
+lesson.steps.forEach((s,i)=>{const b=document.createElement('button');b.className='step-button';b.textContent=`${i===0?'准备':String(i).padStart(2,'0')} ${s.short}`;b.onclick=()=>go(i);$('steps').append(b)});
+$('prev').onclick=()=>go(current-1);$('next').onclick=()=>go(current+1);$('complete').onclick=()=>go(last,false);$('restart').onclick=()=>{zoom=1;offset={x:0,y:0};go(0,false)};$('play').onclick=play;$('speed').onchange=()=>{if(timer){stop();play()}};$('progress').oninput=e=>go(+e.target.value);
+$('zoomIn').onclick=()=>{zoom=Math.min(2.5,zoom+.25);view()};$('zoomOut').onclick=()=>{zoom=Math.max(1,zoom-.25);if(zoom===1)offset={x:0,y:0};view()};$('fit').onclick=()=>{zoom=1;offset={x:0,y:0};view()};
+$('canvas').onpointerdown=e=>{if(zoom===1)return;drag={x:e.clientX,y:e.clientY,ox:offset.x,oy:offset.y};$('canvas').setPointerCapture(e.pointerId)};
+$('canvas').onpointermove=e=>{if(!drag)return;const r=$('diagram').getBoundingClientRect(),scale=Math.min(r.width/(lesson.size[0]/zoom),r.height/(lesson.size[1]/zoom));offset={x:drag.ox+(e.clientX-drag.x)/scale,y:drag.oy+(e.clientY-drag.y)/scale};view()};
+$('canvas').onpointerup=$('canvas').onpointercancel=()=>drag=null;
+$('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('app').requestFullscreen()}catch{$('status').textContent='当前浏览器不支持网页全屏，可以使用浏览器的全屏功能。'}};
+document.addEventListener('fullscreenchange',()=>{$('fullscreen').textContent=document.fullscreenElement?'退出全屏':'全屏'});
+document.addEventListener('keydown',e=>{if(['INPUT','SELECT','BUTTON'].includes(document.activeElement.tagName))return;if(e.key==='ArrowRight'){e.preventDefault();go(current+1)}if(e.key==='ArrowLeft'){e.preventDefault();go(current-1)}if(e.code==='Space'){e.preventDefault();play()}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
+
+const modelSvg=$('model3d'),modelStage=$('modelStage');
+const modelVertices={O:[0,0,0],B:[141,55,0],C:[22,97,0],S:[48,43,141]};
+const modelFaces=[['O','B','C'],['O','B','S'],['B','C','S'],['C','O','S']];
+const modelEdges=[['O','B'],['B','C'],['C','O'],['O','S'],['B','S'],['C','S']];
+const modelCenter=[52.75,48.75,35.25],faceColors=['#dcebea','#b8d9d6','#91c8c3','#c8e2df'];
+let modelYaw=-.68,modelPitch=.56,modelScale=1,modelDrag=null;
+function rotateModel(p){
+  const x=p[0]-modelCenter[0],y=p[1]-modelCenter[1],z=p[2]-modelCenter[2],cy=Math.cos(modelYaw),sy=Math.sin(modelYaw),cp=Math.cos(modelPitch),sp=Math.sin(modelPitch);
+  const rx=x*cy-y*sy,ry=x*sy+y*cy;
+  return [rx,z*cp-ry*sp,ry*cp+z*sp];
+}
+function projectModel(p){const q=rotateModel(p),k=1.08*modelScale;return [150+q[0]*k,114-q[1]*k,q[2]]}
+function drawModel(){
+  modelSvg.replaceChildren();const q={};for(const[id,p]of Object.entries(modelVertices))q[id]=projectModel(p);
+  modelFaces.map((ids,index)=>({ids,index,depth:ids.reduce((s,id)=>s+q[id][2],0)/3})).sort((a,b)=>a.depth-b.depth).forEach(face=>{
+    const pts=face.ids.map(id=>q[id]),a=pts[0],b=pts[1],c=pts[2],nz=(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+    const opacity=nz<0?.58:.78,poly=node('polygon',{points:pts.map(p=>`${p[0]},${p[1]}`).join(' '),fill:faceColors[face.index],opacity,stroke:'#54727a','stroke-width':1.1,'stroke-linejoin':'round'});modelSvg.append(poly);
+  });
+  for(const[a,b]of modelEdges){const p=q[a],r=q[b];modelSvg.append(node('line',{x1:p[0],y1:p[1],x2:r[0],y2:r[1],class:'model-edge'}))}
+  for(const[id,p]of Object.entries(q)){modelSvg.append(node('circle',{cx:p[0],cy:p[1],r:3.6,class:'model-point'}));modelSvg.append(node('text',{x:p[0]+(p[0]<150?-16:7),y:p[1]-7,class:'model-label'},id))}
+}
+modelStage.onpointerdown=e=>{modelDrag={x:e.clientX,y:e.clientY,yaw:modelYaw,pitch:modelPitch};modelStage.setPointerCapture(e.pointerId);e.preventDefault()};
+modelStage.onpointermove=e=>{if(!modelDrag)return;modelYaw=modelDrag.yaw+(e.clientX-modelDrag.x)*.012;modelPitch=modelDrag.pitch+(e.clientY-modelDrag.y)*.012;drawModel()};
+modelStage.onpointerup=modelStage.onpointercancel=()=>modelDrag=null;
+modelStage.addEventListener('wheel',e=>{e.preventDefault();modelScale=Math.max(.62,Math.min(1.55,modelScale-e.deltaY*.001));drawModel()},{passive:false});
+modelStage.onkeydown=e=>{const d=.14;if(e.key==='ArrowLeft')modelYaw-=d;else if(e.key==='ArrowRight')modelYaw+=d;else if(e.key==='ArrowUp')modelPitch-=d;else if(e.key==='ArrowDown')modelPitch+=d;else return;e.preventDefault();drawModel()};
+$('modelReset').onclick=()=>{modelYaw=-.68;modelPitch=.56;modelScale=1;drawModel();modelStage.focus()};
+drawModel();render(false);
+</script>
+</body>
+</html>
